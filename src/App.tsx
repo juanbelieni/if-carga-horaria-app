@@ -1,26 +1,42 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from 'react-router-dom';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import Relatorios from './pages/Relatorios';
+import Tabelas from './pages/Tabelas';
+import GlobalStyle from './styles/global';
+
+const App : React.FC = () => (
+  <Router>
+    <Switch>
+      <Route path="/tabelas/ppcs">
+        <Tabelas table="ppcs" />
+      </Route>
+      <Route path="/tabelas/professores">
+        <Tabelas table="professores" />
+      </Route>
+
+      <Route path="/tabelas/disciplinas">
+        <Tabelas table="disciplinas" />
+      </Route>
+
+      <Route path="/tabelas/cursos">
+        <Tabelas table="cursos" />
+      </Route>
+
+      <Route path="/tabelas/cargas">
+        <Tabelas table="cargas" />
+      </Route>
+
+      <Route path="/relatorios">
+        <Relatorios />
+      </Route>
+    </Switch>
+    <GlobalStyle />
+  </Router>
+);
 
 export default App;
