@@ -1,3 +1,5 @@
+// eslint-disable-next-line no-unused-vars
+import { Column } from 'material-table';
 import React from 'react';
 
 import List from '../../components/List';
@@ -12,19 +14,16 @@ interface TabelasProps {
   table: 'ppcs' | 'disciplinas' | 'professores' | 'cursos' | 'cargas'
 }
 
-interface Table<T> {
+interface Table<T extends Object> {
   name: string,
   table: string,
-  fields: {
-    title: string,
-    getValue: (row: T) => string | number,
-  }[]
+  columns: Column<T>[]
 }
 
 
 function Tabelas({ table } : TabelasProps) {
   const tables : {
-    ppcs: Table<Ppc>,
+    ppcs: Table<Ppc>
     disciplinas: Table<Disciplina>,
     professores: Table<Professor>,
     cursos: Table<Curso>,
@@ -33,53 +32,53 @@ function Tabelas({ table } : TabelasProps) {
     ppcs: {
       name: 'PPCS',
       table: 'ppcs',
-      fields: [
-        { title: 'Nome', getValue: ({ nome }) => nome },
-        { title: 'Formacao', getValue: ({ formacao }) => formacao },
-        { title: 'Semestral', getValue: ({ semestral }) => (semestral === 1 ? 'Semestral' : 'Anual') },
-        { title: 'Duracao', getValue: ({ semestral, duracao }) => `${duracao} ${semestral ? 'semestre' : 'ano'}${duracao > 0 ? '(s)' : ''}` },
-        { title: 'Ano', getValue: ({ ano }) => ano },
+      columns: [
+        { title: 'Nome', field: 'nome' },
+        { title: 'Formacao', field: 'formacao' },
+        { title: 'Semestral', render: ({ semestral }) => (semestral === 1 ? 'Semestral' : 'Anual') },
+        { title: 'Duracao', render: ({ semestral, duracao }) => `${duracao} ${semestral ? 'semestre' : 'ano'}${duracao > 0 ? '(s)' : ''}` },
+        { title: 'Ano', render: ({ ano }) => ano },
       ],
     },
     professores: {
       name: 'Professores',
       table: 'professores',
-      fields: [
-        { title: 'Nome', getValue: ({ nome }) => nome },
-        { title: 'Siape', getValue: ({ siape }) => siape },
+      columns: [
+        { title: 'Nome', field: 'nome' },
+        { title: 'Siape', field: 'siape' },
       ],
     },
     disciplinas: {
       name: 'Disciplinas',
       table: 'disciplinas',
-      fields: [
-        { title: 'Nome', getValue: ({ nome }) => nome },
-        { title: 'Periodo', getValue: ({ periodo }) => `${periodo}º` },
-        { title: 'Duracao da aula', getValue: ({ duracao_aula }) => `${duracao_aula} minutos` },
-        { title: 'Aulas por semana', getValue: ({ aulas_semana }) => `${aulas_semana} aulas` },
-        { title: 'PPC', getValue: ({ ppc }) => `${ppc.nome} ${ppc.formacao} ${ppc.ano}` },
+      columns: [
+        { title: 'Nome', field: 'nome' },
+        { title: 'Periodo', render: ({ periodo }) => `${periodo}º` },
+        { title: 'Duracao da aula', render: ({ duracao_aula }) => `${duracao_aula} minutos` },
+        { title: 'Aulas por semana', render: ({ aulas_semana }) => `${aulas_semana} aulas` },
+        { title: 'PPC', render: ({ ppc }) => `${ppc.nome} ${ppc.formacao} ${ppc.ano}` },
       ],
     },
     cursos: {
       name: 'Cursos',
       table: 'cursos',
-      fields: [
-        { title: 'PPC', getValue: ({ ppc }) => `${ppc.nome} ${ppc.formacao} ${ppc.ano}` },
-        { title: 'Ano de ingresso', getValue: ({ ano_ingresso }) => ano_ingresso },
-        { title: 'Semestre de ingresso', getValue: ({ semestre_ingresso, ppc }) => (ppc.semestral ? semestre_ingresso : 'Anual') },
+      columns: [
+        { title: 'PPC', render: ({ ppc }) => `${ppc.nome} ${ppc.formacao} ${ppc.ano}` },
+        { title: 'Ano de ingresso', render: ({ ano_ingresso }) => ano_ingresso },
+        { title: 'Semestre de ingresso', render: ({ semestre_ingresso, ppc }) => (ppc.semestral ? semestre_ingresso : 'Anual') },
       ],
     },
     cargas: {
       name: 'Carga horária',
       table: 'cargas',
-      fields: [
-        { title: 'Professor(a)', getValue: ({ professor }) => professor },
-        { title: 'Disciplina', getValue: ({ disciplina }) => disciplina },
-        { title: 'Periodo', getValue: ({ periodo }) => `${periodo}º` },
-        { title: 'Curso', getValue: ({ curso }) => curso },
-        { title: 'Duracao da aula', getValue: ({ duracao_aula }) => `${duracao_aula} minutos` },
-        { title: 'Aulas por semana', getValue: ({ aulas_semana }) => `${aulas_semana} aulas` },
-        { title: 'Carga Horária', getValue: ({ carga_horaria }) => `${carga_horaria} minutos` },
+      columns: [
+        { title: 'Professor(a)', render: ({ professor }) => professor },
+        { title: 'Disciplina', render: ({ disciplina }) => disciplina },
+        { title: 'Periodo', render: ({ periodo }) => `${periodo}º` },
+        { title: 'Curso', render: ({ curso }) => curso },
+        { title: 'Duracao da aula', render: ({ duracao_aula }) => `${duracao_aula} minutos` },
+        { title: 'Aulas por semana', render: ({ aulas_semana }) => `${aulas_semana} aulas` },
+        { title: 'Carga Horária', render: ({ carga_horaria }) => `${carga_horaria} minutos` },
       ],
     },
   };
@@ -89,7 +88,7 @@ function Tabelas({ table } : TabelasProps) {
       <List
         name={tables[table].name}
         table={tables[table].table}
-        fields={tables[table].fields}
+        columns={tables[table].columns}
       />
     </MainPage>
   );
