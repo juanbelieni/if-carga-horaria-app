@@ -33,8 +33,8 @@ function Tabelas({ table } : TabelasProps) {
       name: 'PPCS',
       table: 'ppcs',
       columns: [
-        { title: 'Nome', field: 'nome' },
-        { title: 'Formacao', field: 'formacao' },
+        { title: 'Nome', field: 'nome', sorting: false },
+        { title: 'Formacao', field: 'formacao', lookup: { Integrado: 'Integrado', Subsequente: 'Subsequente', Superior: 'Superior' } },
         { title: 'Semestral', render: ({ semestral }) => (semestral === 1 ? 'Semestral' : 'Anual') },
         { title: 'Duracao', render: ({ semestral, duracao }) => `${duracao} ${semestral ? 'semestre' : 'ano'}${duracao > 0 ? '(s)' : ''}` },
         { title: 'Ano', render: ({ ano }) => ano },

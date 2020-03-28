@@ -5,8 +5,8 @@ const api = axios.create({
 });
 
 export default {
-  async index(table: string) {
-    const res = await api.get(`/${table}`);
+  async index(table: string, params: {[key: string]: any}) {
+    const res = await api.get(`/${table}`, { params });
     return res.data;
   },
 };
