@@ -42,6 +42,8 @@ function List({ name, table, columns }: ListProps) {
           draggable: false,
           selection: true,
           filtering: true,
+          sorting: false,
+          search: false,
         }}
       />
     </Container>

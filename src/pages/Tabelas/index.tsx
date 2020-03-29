@@ -33,11 +33,16 @@ function Tabelas({ table } : TabelasProps) {
       name: 'PPCS',
       table: 'ppcs',
       columns: [
-        { title: 'Nome', field: 'nome', sorting: false },
+        { title: 'Nome', field: 'nome', filtering: false },
         { title: 'Formacao', field: 'formacao', lookup: { Integrado: 'Integrado', Subsequente: 'Subsequente', Superior: 'Superior' } },
-        { title: 'Semestral', render: ({ semestral }) => (semestral === 1 ? 'Semestral' : 'Anual') },
+        {
+          title: 'Semestral',
+          field: 'semestral',
+          render: ({ semestral }) => (semestral === 1 ? 'Semestral' : 'Anual'),
+          lookup: { 1: 'Semestral', 0: 'Anual' },
+        },
         { title: 'Duracao', render: ({ semestral, duracao }) => `${duracao} ${semestral ? 'semestre' : 'ano'}${duracao > 0 ? '(s)' : ''}` },
-        { title: 'Ano', render: ({ ano }) => ano },
+        { title: 'Ano', field: 'ano' },
       ],
     },
     professores: {
@@ -64,8 +69,13 @@ function Tabelas({ table } : TabelasProps) {
       table: 'cursos',
       columns: [
         { title: 'PPC', render: ({ ppc }) => `${ppc.nome} ${ppc.formacao} ${ppc.ano}` },
-        { title: 'Ano de ingresso', render: ({ ano_ingresso }) => ano_ingresso },
-        { title: 'Semestre de ingresso', render: ({ semestre_ingresso, ppc }) => (ppc.semestral ? semestre_ingresso : 'Anual') },
+        { title: 'Ano de ingresso', field: 'ano_ingresso' },
+        {
+          title: 'Semestre de ingresso',
+          field: 'semestre_ingresso',
+          render: ({ semestre_ingresso, ppc }) => (ppc.semestral ? `${semestre_ingresso}º semestre` : 'Anual'),
+          lookup: { 1: '1º semestre', 2: '2º semestre', 0: 'Anual' },
+        },
       ],
     },
     cargas: {
