@@ -1,15 +1,17 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 
-import { Container } from './styles';
+import Sidebar from '../Sidebar';
+import { Container, Content } from './styles';
 
-const Tabelas : React.FC<{children: React.ReactNode}> = ({ children }) => (
-  <Container>
-    {children}
-  </Container>
-);
+function MainPage({ children }: {children: React.ReactNode}) {
+  return (
+    <Container>
+      <Sidebar page={0} />
+      <Content>
+        {children}
+      </Content>
+    </Container>
+  );
+}
 
-Tabelas.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-export default Tabelas;
+export default MainPage;

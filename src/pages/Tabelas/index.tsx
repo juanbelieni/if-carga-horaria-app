@@ -2,16 +2,15 @@
 import { Column } from 'material-table';
 import React from 'react';
 
-import List from '../../components/List';
 import MainPage from '../../components/MainPage';
-import Sidebar from '../../components/Sidebar';
+import Table from '../../components/Table';
 import {
   // eslint-disable-next-line no-unused-vars
   Ppc, Disciplina, Professor, Curso, CargaHoraria,
 } from '../../models';
 
 interface TabelasProps {
-  table: 'ppcs' | 'disciplinas' | 'professores' | 'cursos' | 'cargas'
+  table: 'ppcs' | 'disciplinas' | 'professores' | 'cursos'
 }
 
 interface Table<T extends Object> {
@@ -27,7 +26,6 @@ function Tabelas({ table } : TabelasProps) {
     disciplinas: Table<Disciplina>,
     professores: Table<Professor>,
     cursos: Table<Curso>,
-    cargas: Table<CargaHoraria>,
   } = {
     ppcs: {
       name: 'PPCS',
@@ -41,7 +39,7 @@ function Tabelas({ table } : TabelasProps) {
           render: ({ semestral }) => (semestral === 1 ? 'Semestral' : 'Anual'),
           lookup: { 1: 'Semestral', 0: 'Anual' },
         },
-        { title: 'Duracao', render: ({ semestral, duracao }) => `${duracao} ${semestral ? 'semestre' : 'ano'}${duracao > 0 ? '(s)' : ''}` },
+        { title: 'Duracao', render: ({ semestral, duracao }) => `${duracao} ${semestral ? 'semestre' : 'ano'}${duracao > 1 ? 's' : ''}` },
         { title: 'Ano', field: 'ano' },
       ],
     },
@@ -78,24 +76,10 @@ function Tabelas({ table } : TabelasProps) {
         },
       ],
     },
-    cargas: {
-      name: 'Carga horária',
-      table: 'cargas',
-      columns: [
-        { title: 'Professor(a)', render: ({ professor }) => professor },
-        { title: 'Disciplina', render: ({ disciplina }) => disciplina },
-        { title: 'Periodo', render: ({ periodo }) => `${periodo}º` },
-        { title: 'Curso', render: ({ curso }) => curso },
-        { title: 'Duracao da aula', render: ({ duracao_aula }) => `${duracao_aula} minutos` },
-        { title: 'Aulas por semana', render: ({ aulas_semana }) => `${aulas_semana} aulas` },
-        { title: 'Carga Horária', render: ({ carga_horaria }) => `${carga_horaria} minutos` },
-      ],
-    },
   };
   return (
     <MainPage>
-      <Sidebar page={0} />
-      <List
+      <Table
         name={tables[table].name}
         table={tables[table].table}
         columns={tables[table].columns}

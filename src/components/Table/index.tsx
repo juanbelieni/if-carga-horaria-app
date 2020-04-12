@@ -5,13 +5,13 @@ import React from 'react';
 import api from '../../api';
 import { Container } from './styles';
 
-export interface ListProps {
+export interface TableProps {
   name: string,
   table: string,
   columns: Column<any>[]
 }
 
-function List({ name, table, columns }: ListProps) {
+function Table({ name, table, columns }: TableProps) {
   return (
     <Container>
       <MaterialTable
@@ -49,4 +49,4 @@ function List({ name, table, columns }: ListProps) {
     </Container>
   );
 }
-export default List;
+export default Table;
