@@ -1,37 +1,42 @@
-import PropTypes from 'prop-types';
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import React from 'react';
-import {
-  Link,
-} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import ifSvg from '../../assets/svg/if.svg';
-import relatoriosSvg from '../../assets/svg/relatorios.svg';
-import tabelasSvg from '../../assets/svg/tabelas.svg';
-import { Container, Logo, Item } from './styles';
+import { Container, Logo } from './styles';
 
-const Sidebar : React.FC<{page: Number}> = ({ page }) => (
-  <Container>
-    <Logo>
-      <img src={ifSvg} alt="Logo" />
-      <p>Instituto Federal</p>
-    </Logo>
+export default function () {
+  const history = useHistory();
+  return (
+    <Container>
+      <Drawer
+        variant="permanent"
+        anchor="left"
+        style={{ width: 210 }}
+      >
+        <Logo>
+          <img src={ifSvg} alt="Logo" />
+          <p>Instituto Federal</p>
+        </Logo>
+        <Divider />
+        <List>
+          <ListItem onClick={() => history.push('/tabelas/ppcs')} button>
+            <ListItemText>PPCs</ListItemText>
+          </ListItem>
+          <ListItem onClick={() => history.push('/tabelas/cursos')} button>
+            <ListItemText>Cursos</ListItemText>
+          </ListItem>
+          <ListItem onClick={() => history.push('/tabelas/professores')} button>
+            <ListItemText>Professores</ListItemText>
+          </ListItem>
+        </List>
+        <Divider />
 
-    <Item selected={page === 0}>
-      <img src={tabelasSvg} alt="" />
-      <Link to="/tabelas">Tabelas</Link>
-    </Item>
-
-    <Item selected={page === 1}>
-      <img src={relatoriosSvg} alt="" />
-      <Link to="/relatorios">Relatórios</Link>
-    </Item>
-
-  </Container>
-);
-
-
-Sidebar.propTypes = {
-  page: PropTypes.number.isRequired,
-};
-
-export default Sidebar;
+      </Drawer>
+    </Container>
+  );
+}

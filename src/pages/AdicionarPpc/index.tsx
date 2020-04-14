@@ -6,7 +6,7 @@ import Form from '../../components/Form';
 import MainPage from '../../components/MainPage';
 // import { Container } from './styles';
 
-export default function CriarPpc() {
+export default function AdicionarPpc() {
   return (
     <MainPage>
       <Form title="PPC" table="ppcs">

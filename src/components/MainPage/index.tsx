@@ -6,7 +6,7 @@ import { Container, Content } from './styles';
 function MainPage({ children }: {children: React.ReactNode}) {
   return (
     <Container>
-      <Sidebar page={0} />
+      <Sidebar />
       <Content>
         {children}
       </Content>

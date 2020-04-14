@@ -6,7 +6,6 @@ export const Container = styled.div`
   padding: 20px;
 
   h1 {
-    color: white;
     margin-bottom: 20px;
   }
 `;

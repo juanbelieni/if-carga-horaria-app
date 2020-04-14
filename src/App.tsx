@@ -7,7 +7,7 @@ import {
   Route,
 } from 'react-router-dom';
 
-import CriarPpc from './pages/CriarPpc';
+import AdicionarPpc from './pages/AdicionarPpc';
 import Relatorios from './pages/Relatorios';
 import Tabelas from './pages/Tabelas';
 import GlobalStyle from './styles/global';
@@ -19,6 +19,7 @@ const theme = createMuiTheme({
   },
 });
 
+
 const App : React.FC = () => (
   <ThemeProvider theme={theme}>
     <Router>
@@ -27,8 +28,8 @@ const App : React.FC = () => (
           <Tabelas table="ppcs" />
         </Route>
 
-        <Route path="/tabelas/ppcs/criar" exact>
-          <CriarPpc />
+        <Route path="/tabelas/ppcs/adicionar" exact>
+          <AdicionarPpc />
         </Route>
 
         <Route path="/tabelas/professores">
@@ -43,8 +44,8 @@ const App : React.FC = () => (
           <Relatorios />
         </Route>
       </Switch>
-      <GlobalStyle />
     </Router>
+    <GlobalStyle />
   </ThemeProvider>
 );
 

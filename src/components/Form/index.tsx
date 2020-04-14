@@ -17,10 +17,10 @@ export default function Form({ children, title, table }: FormProps) {
 
   return (
     <Container>
-      <h1>{`Criar ${title}`}</h1>
+      <h1>{`Adicionar ${title}`}</h1>
       <Unform onSubmit={submit}>
         {children}
-        <Button variant="contained" color="primary" className="button" type="submit">Criar</Button>
+        <Button variant="contained" color="primary" className="button" type="submit" style={{ color: 'white' }}>Adicionar</Button>
       </Unform>
     </Container>
   );
