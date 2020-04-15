@@ -3,7 +3,7 @@ import React from 'react';
 import Sidebar from '../Sidebar';
 import { Container, Content } from './styles';
 
-function MainPage({ children }: {children: React.ReactNode}) {
+function DefaultPage({ children }: {children: React.ReactNode}) {
   return (
     <Container>
       <Sidebar />
@@ -14,4 +14,4 @@ function MainPage({ children }: {children: React.ReactNode}) {
   );
 }
 
-export default MainPage;
+export default DefaultPage;

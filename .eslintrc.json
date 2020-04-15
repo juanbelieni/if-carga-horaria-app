@@ -80,6 +80,8 @@
     "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
     "import/prefer-default-export": "off",
     "react/prop-types": "off",
-    "camelcase": "off"
+    "camelcase": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars-experimental": "error"
   }
 }

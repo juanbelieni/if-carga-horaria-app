@@ -9,7 +9,16 @@ export default {
     const res = await api.get(`/${table}`, { params });
     return res.data;
   },
+
   async store(table: string, data: Object) {
-    await api.post(`/${table}`, data);
+    const res = await api.post(`/${table}`, data);
+
+    return res.data;
   },
+
+  async show(table: string, id: number) {
+    const res = await api.get(`/${table}/${id}`)
+
+    return res.data;
+  }
 };

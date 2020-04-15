@@ -2,11 +2,10 @@
 import { Column } from 'material-table';
 import React from 'react';
 
-import MainPage from '../../components/MainPage';
+import DefaultPage from '../../components/DefaultPage';
 import Table from '../../components/Table';
 import {
-  // eslint-disable-next-line no-unused-vars
-  Ppc, Disciplina, Professor, Curso, CargaHoraria,
+  Ppc, Disciplina, Professor, Curso,
 } from '../../models';
 
 interface TabelasProps {
@@ -16,6 +15,7 @@ interface TabelasProps {
 interface Table<T extends Object> {
   name: string,
   table: string,
+  title: string,
   columns: Column<T>[]
 }
 
@@ -28,7 +28,8 @@ function Tabelas({ table } : TabelasProps) {
     cursos: Table<Curso>,
   } = {
     ppcs: {
-      name: 'PPCS',
+      name: 'PPC',
+      title: 'PPCs',
       table: 'ppcs',
       columns: [
         { title: 'Nome', field: 'nome', filtering: false },
@@ -44,7 +45,8 @@ function Tabelas({ table } : TabelasProps) {
       ],
     },
     professores: {
-      name: 'Professores',
+      name: 'professor',
+      title: 'Professores',
       table: 'professores',
       columns: [
         { title: 'Nome', field: 'nome' },
@@ -52,7 +54,8 @@ function Tabelas({ table } : TabelasProps) {
       ],
     },
     disciplinas: {
-      name: 'Disciplinas',
+      name: 'disciplina',
+      title: 'Disciplinas',
       table: 'disciplinas',
       columns: [
         { title: 'Nome', field: 'nome' },
@@ -63,7 +66,8 @@ function Tabelas({ table } : TabelasProps) {
       ],
     },
     cursos: {
-      name: 'Cursos',
+      name: 'curso',
+      title: 'Cursos',
       table: 'cursos',
       columns: [
         { title: 'PPC', render: ({ ppc }) => `${ppc.nome} ${ppc.formacao} ${ppc.ano}` },
@@ -78,13 +82,14 @@ function Tabelas({ table } : TabelasProps) {
     },
   };
   return (
-    <MainPage>
+    <DefaultPage>
       <Table
         name={tables[table].name}
+        title={tables[table].title}
         table={tables[table].table}
         columns={tables[table].columns}
       />
-    </MainPage>
+    </DefaultPage>
   );
 }
 
