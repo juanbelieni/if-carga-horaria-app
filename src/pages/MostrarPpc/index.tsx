@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import SchoolIcon from '@material-ui/icons/School';
+import Skeleton from '@material-ui/lab/Skeleton';
 import MaterialTable from 'material-table';
 import React, { useState, useEffect, FunctionComponent } from 'react';
 import { useParams } from 'react-router-dom';
@@ -26,7 +27,7 @@ export default function MostrarPpc() {
     api.show('ppcs', id).then((_data) => {
       setData(_data);
     });
-  }, []);
+  }, [id]);
 
   function createListItem(name: string, value: number | string | undefined, Icon: FunctionComponent) {
     return (
@@ -36,7 +37,7 @@ export default function MostrarPpc() {
             <Icon />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary={name} secondary={value} />
+        <ListItemText primary={name} secondary={value ?? <Skeleton variant="text" />} />
       </ListItem>
     );
   }
@@ -113,10 +114,10 @@ export default function MostrarPpc() {
           <Divider variant="inset" component="li" />
           {createListItem('Ano', data?.ano, CalendarIcon)}
           <Divider variant="inset" component="li" />
-          {createListItem('Semestral ou anual', data?.semestral ? 'Semestral' : 'Anual', CalendarIcon)}
+          {createListItem('Semestral ou anual', data && (data?.semestral ? 'Semestral' : 'Anual'), CalendarIcon)}
           {/* <Divider variant="inset" component="li" /> */}
         </List>
-        {createAllTables()}
+        {data ? createAllTables() : <Skeleton variant="rect" height={350} />}
       </Container>
     </DefaultPage>
   );
