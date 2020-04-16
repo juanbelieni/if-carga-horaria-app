@@ -11,7 +11,9 @@ export interface TableProps {
   columns: Column<any>[]
 }
 
-function Table({title, name, table, columns }: TableProps) {
+function Table({
+  title, name, table, columns,
+}: TableProps) {
   const history = useHistory();
 
   return (
@@ -77,14 +79,14 @@ function Table({title, name, table, columns }: TableProps) {
           lastTooltip: 'Última página',
         },
         header: {
-          actions: 'Ações'
+          actions: 'Ações',
         },
         body: {
           emptyDataSourceMessage: 'Nenhum dado para mostrar',
           filterRow: {
-              filterTooltip: 'Filtrar'
-          }
-      }
+            filterTooltip: 'Filtrar',
+          },
+        },
       }}
     />
   );

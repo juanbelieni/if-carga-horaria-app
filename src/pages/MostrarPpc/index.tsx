@@ -1,31 +1,31 @@
-import React, {useState, useEffect, FunctionComponent} from 'react';
-import { useParams } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography'
-import {Container} from './styles'
-import DefaultPage from '../../components/DefaultPage';
+import Avatar from '@material-ui/core/Avatar';
+import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
+import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import SchoolIcon from '@material-ui/icons/School';
-import Divider from '@material-ui/core/Divider';
 import MaterialTable from 'material-table';
+import React, { useState, useEffect, FunctionComponent } from 'react';
+import { useParams } from 'react-router-dom';
 
 import api from '../../api';
-import {Ppc} from '../../models';
+import DefaultPage from '../../components/DefaultPage';
+import { Ppc, Disciplina } from '../../models';
+import { Container } from './styles';
 
 export default function MostrarPpc() {
   const { id } = useParams<{id: string}>();
   const [data, setData] = useState<Ppc>();
 
   useEffect(() => {
-    api.show('ppcs', Number(id)).then((_data) => {
-      setData(_data)
-    })
-  }, [])
+    api.show('ppcs', id).then((_data) => {
+      setData(_data);
+    });
+  }, []);
 
   function createListItem(name: string, value: number | string | undefined, Icon: FunctionComponent) {
     return (
@@ -40,58 +40,49 @@ export default function MostrarPpc() {
     );
   }
 
-  return (
-    <DefaultPage>
-      <Container>
-        <Typography variant="h4" component="h1">PPC</Typography>
-        <List >
-          {createListItem('Nome', data?.nome, LocalOfferIcon)}
-          <Divider variant="inset" component="li" />
-          {createListItem('Formação', data?.formacao, SchoolIcon)}
-          <Divider variant="inset" component="li" />
-          {createListItem('Ano', data?.ano, CalendarIcon)}
-          <Divider variant="inset" component="li" />
-          {createListItem('Semestral ou anual', data?.semestral ? 'Semestral' : 'Anual', CalendarIcon)}
-          {/* <Divider variant="inset" component="li" /> */}
-        </ List>
+  function createAllTables() {
+    const tables = [];
+    for (let periodo = 1; periodo <= (data?.duracao || 0); periodo += 1) {
+      tables.push(
         <MaterialTable
-          title={`1º ${data?.semestral ? 'Semestre' : 'Ano'}`}
+          title={`${periodo}º ${data?.semestral ? 'semestre' : 'ano'}`}
           columns={[
             { title: 'Discplina', field: 'nome' },
             { title: 'Duracao da aula (min)', field: 'duracao_aula' },
-            { title: 'Aulas por semana', field: 'aulas_semana'  },
+            { title: 'Aulas por semana', field: 'aulas_semana' },
           ]}
           data={({ page, pageSize }) => new Promise((resolve) => {
             const params = {
               page: page + 1,
               perPage: pageSize,
               ppc_id: id,
-              periodo: 1,
+              periodo,
+
             };
 
             api.index('disciplinas', params)
               .then((disciplinas) => {
                 resolve({
                   data: disciplinas.data,
-                  page: disciplinas.page - 1, 
+                  page: disciplinas.page - 1,
                   totalCount: disciplinas.total,
                 });
               });
           })}
           editable={{
-            onRowAdd: newData =>
-              new Promise((resolve, reject) => {
-                api.store('disciplinas', {...newData, periodo: 1, ppc_id: id})
-                .then(resolve)
-              }),
-            onRowUpdate: (newData, oldData) =>
-              new Promise((resolve, reject) => {
+            onRowAdd: (newData: Object) => new Promise((resolve, reject) => {
+              api.store('disciplinas', { ...newData, periodo, ppc_id: id })
+                .then(resolve);
+            }),
 
-              }),
-            onRowDelete: oldData =>
-              new Promise((resolve, reject) => {
-                
-              }),
+            onRowUpdate: (newData: Disciplina) => new Promise((resolve, reject) => {
+              api.update('disciplinas', newData.id, newData)
+                .then(resolve);
+            }),
+            onRowDelete: (oldData: Disciplina) => new Promise((resolve, reject) => {
+              api.destroy('disciplinas', oldData.id)
+                .then(resolve);
+            }),
           }}
           options={{
             draggable: false,
@@ -102,7 +93,28 @@ export default function MostrarPpc() {
           style={{
             width: '100%',
           }}
-      />
+        />,
+      );
+      tables.push(<br />);
+    }
+    return tables;
+  }
+
+  return (
+    <DefaultPage>
+      <Container>
+        <Typography variant="h4" component="h1">PPC</Typography>
+        <List>
+          {createListItem('Nome', data?.nome, LocalOfferIcon)}
+          <Divider variant="inset" component="li" />
+          {createListItem('Formação', data?.formacao, SchoolIcon)}
+          <Divider variant="inset" component="li" />
+          {createListItem('Ano', data?.ano, CalendarIcon)}
+          <Divider variant="inset" component="li" />
+          {createListItem('Semestral ou anual', data?.semestral ? 'Semestral' : 'Anual', CalendarIcon)}
+          {/* <Divider variant="inset" component="li" /> */}
+        </List>
+        {createAllTables()}
       </Container>
     </DefaultPage>
   );
