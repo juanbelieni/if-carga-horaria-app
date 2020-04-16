@@ -3,6 +3,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 
 import api from '../../api';
+import MTLocalization from '../../localization/MaterialTable.json';
 
 export interface TableProps {
   name: string,
@@ -65,29 +66,7 @@ function Table({
       style={{
         width: '100%',
       }}
-      localization={{
-        pagination: {
-          labelRowsSelect: 'linhas',
-          labelDisplayedRows: '{from}-{to} de {count}',
-          previousAriaLabel: 'Página anterior',
-          previousTooltip: 'Página anterior',
-          nextAriaLabel: 'Próxima página',
-          nextTooltip: 'Próxima página',
-          firstAriaLabel: 'Primeira página',
-          firstTooltip: 'Primeira página',
-          lastAriaLabel: 'Última página',
-          lastTooltip: 'Última página',
-        },
-        header: {
-          actions: 'Ações',
-        },
-        body: {
-          emptyDataSourceMessage: 'Nenhum dado para mostrar',
-          filterRow: {
-            filterTooltip: 'Filtrar',
-          },
-        },
-      }}
+      localization={MTLocalization}
     />
   );
 }

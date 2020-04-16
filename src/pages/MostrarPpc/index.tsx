@@ -14,6 +14,7 @@ import { useParams } from 'react-router-dom';
 
 import api from '../../api';
 import DefaultPage from '../../components/DefaultPage';
+import MTLocalization from '../../localization/MaterialTable.json';
 import { Ppc, Disciplina } from '../../models';
 import { Container } from './styles';
 
@@ -93,6 +94,7 @@ export default function MostrarPpc() {
           style={{
             width: '100%',
           }}
+          localization={MTLocalization}
         />,
       );
       tables.push(<br />);
