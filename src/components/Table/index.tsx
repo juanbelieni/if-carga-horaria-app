@@ -9,7 +9,7 @@ export interface TableProps {
   name: string,
   title: string,
   table: string,
-  columns: Column<any>[]
+  columns: Column<any>[],
 }
 
 function Table({
@@ -45,7 +45,7 @@ function Table({
       actions={[
         {
           icon: 'launch',
-          tooltip: `Abrir ${name}`,
+          tooltip: `Mostrar ${name}`,
           onClick: (event, rowData) => history.push(`/tabelas/${table}/${rowData.id}`),
         },
         {

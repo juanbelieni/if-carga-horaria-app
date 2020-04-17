@@ -5,25 +5,24 @@ import React from 'react';
 import DefaultPage from '../../components/DefaultPage';
 import Table from '../../components/Table';
 import {
-  Ppc, Disciplina, Professor, Curso,
+  Ppc, Professor, Curso,
 } from '../../models';
 
 interface TabelasProps {
-  table: 'ppcs' | 'disciplinas' | 'professores' | 'cursos'
+  table: 'ppcs' | 'professores' | 'cursos',
 }
 
 interface Table<T extends Object> {
   name: string,
   table: string,
   title: string,
-  columns: Column<T>[]
+  columns: Column<T>[],
 }
 
 
 function Tabelas({ table } : TabelasProps) {
   const tables : {
-    ppcs: Table<Ppc>
-    disciplinas: Table<Disciplina>,
+    ppcs: Table<Ppc>,
     professores: Table<Professor>,
     cursos: Table<Curso>,
   } = {
@@ -35,7 +34,7 @@ function Tabelas({ table } : TabelasProps) {
         { title: 'Nome', field: 'nome', filtering: false },
         { title: 'Formacao', field: 'formacao', lookup: { Integrado: 'Integrado', Subsequente: 'Subsequente', Superior: 'Superior' } },
         {
-          title: 'Semestral',
+          title: 'Semestral ou anual',
           field: 'semestral',
           render: ({ semestral }) => (semestral === 1 ? 'Semestral' : 'Anual'),
           lookup: { 1: 'Semestral', 0: 'Anual' },
@@ -53,29 +52,17 @@ function Tabelas({ table } : TabelasProps) {
         { title: 'Siape', field: 'siape' },
       ],
     },
-    disciplinas: {
-      name: 'disciplina',
-      title: 'Disciplinas',
-      table: 'disciplinas',
-      columns: [
-        { title: 'Nome', field: 'nome' },
-        { title: 'Periodo', render: ({ periodo }) => `${periodo}º` },
-        { title: 'Duracao da aula', render: ({ duracao_aula }) => `${duracao_aula} minutos` },
-        { title: 'Aulas por semana', render: ({ aulas_semana }) => `${aulas_semana} aulas` },
-        { title: 'PPC', render: ({ ppc }) => `${ppc.nome} ${ppc.formacao} ${ppc.ano}` },
-      ],
-    },
     cursos: {
       name: 'curso',
       title: 'Cursos',
       table: 'cursos',
       columns: [
-        { title: 'PPC', render: ({ ppc }) => `${ppc.nome} ${ppc.formacao} ${ppc.ano}` },
+        { title: 'PPC', field: 'ppc', filtering: false },
         { title: 'Ano de ingresso', field: 'ano_ingresso' },
         {
           title: 'Semestre de ingresso',
           field: 'semestre_ingresso',
-          render: ({ semestre_ingresso, ppc }) => (ppc.semestral ? `${semestre_ingresso}º semestre` : 'Anual'),
+          render: ({ semestre_ingresso }) => (semestre_ingresso ? `${semestre_ingresso}º semestre` : 'Anual'),
           lookup: { 1: '1º semestre', 2: '2º semestre', 0: 'Anual' },
         },
       ],

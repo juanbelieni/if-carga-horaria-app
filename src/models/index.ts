@@ -1,6 +1,6 @@
 export interface DefaultModel {
   id: number,
-  [key: string]: number | string | DefaultModel | DefaultModel[]
+  [key: string]: number | string | DefaultModel | DefaultModel[],
 }
 
 export interface Ppc {
@@ -31,7 +31,9 @@ export interface Curso {
   id: number,
   ano_ingresso: number,
   semestre_ingresso: number,
-  ppc: Ppc,
+  simulado: boolean,
+  ppc: string,
+  ppc_id: number,
 }
 
 export interface CargaHoraria {
@@ -42,7 +44,7 @@ export interface CargaHoraria {
   ano: number,
   semestre: number | null,
   periodo: number,
-  aulas_semana: number
-  duracao_aula: number
-  carga_horaria: number
+  aulas_semana: number,
+  duracao_aula: number,
+  carga_horaria: number,
 }

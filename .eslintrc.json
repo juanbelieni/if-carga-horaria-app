@@ -82,7 +82,17 @@
     "react/prop-types": "off",
     "camelcase": "off",
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": "off"
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/member-delimiter-style": ["error", {
+       "multiline": {
+         "delimiter": "comma",
+         "requireLast": true
+       },
+       "singleline": {
+         "delimiter": "comma",
+         "requireLast": false
+       }
+     }]
     // "@typescript-eslint/no-unused-vars-experimental": "error"
   }
 }

@@ -6,7 +6,7 @@ import DefaultPage from '../../components/DefaultPage';
 import Form from '../../components/Form';
 
 
-export default function AdicionarPpc() {
+export default function AddPpc() {
   const [anual, setAnual] = useState<boolean>(true);
   return (
     <DefaultPage>

@@ -1,25 +1,17 @@
-import Avatar from '@material-ui/core/Avatar';
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import SchoolIcon from '@material-ui/icons/School';
 import Skeleton from '@material-ui/lab/Skeleton';
 import MaterialTable from 'material-table';
-import React, { useState, useEffect, FunctionComponent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import api from '../../api';
-import DefaultPage from '../../components/DefaultPage';
+import ShowData from '../../components/ShowData';
 import MTLocalization from '../../localization/MaterialTable.json';
 import { Ppc, Disciplina } from '../../models';
-import { Container } from './styles';
 
-export default function MostrarPpc() {
+export default function ShowPpc() {
   const { id } = useParams<{id: string}>();
   const [data, setData] = useState<Ppc>();
 
@@ -28,19 +20,6 @@ export default function MostrarPpc() {
       setData(_data);
     });
   }, [id]);
-
-  function createListItem(name: string, value: number | string | undefined, Icon: FunctionComponent) {
-    return (
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar>
-            <Icon />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText primary={name} secondary={value ?? <Skeleton variant="text" />} />
-      </ListItem>
-    );
-  }
 
   function createAllTables() {
     const tables = [];
@@ -104,21 +83,34 @@ export default function MostrarPpc() {
   }
 
   return (
-    <DefaultPage>
-      <Container>
-        <Typography variant="h4" component="h1">PPC</Typography>
-        <List>
-          {createListItem('Nome', data?.nome, LocalOfferIcon)}
-          <Divider variant="inset" component="li" />
-          {createListItem('Formação', data?.formacao, SchoolIcon)}
-          <Divider variant="inset" component="li" />
-          {createListItem('Ano', data?.ano, CalendarIcon)}
-          <Divider variant="inset" component="li" />
-          {createListItem('Semestral ou anual', data && (data?.semestral ? 'Semestral' : 'Anual'), CalendarIcon)}
-          {/* <Divider variant="inset" component="li" /> */}
-        </List>
-        {data ? createAllTables() : <Skeleton variant="rect" height={350} />}
-      </Container>
-    </DefaultPage>
+    <ShowData
+      title="PPC"
+      data={[
+        {
+          name: 'Nome',
+          value: data?.nome,
+          icon: LocalOfferIcon,
+        },
+        {
+          name: 'Formação',
+          value: data?.formacao,
+          icon: SchoolIcon,
+        },
+        {
+          name: 'Ano',
+          value: data?.ano,
+          icon: CalendarIcon,
+        },
+        {
+          name: 'Semestral ou anual',
+          value: data && (data?.semestral ? 'Semestral' : 'Anual'),
+          icon: CalendarIcon,
+        },
+      ]}
+    >
+
+      {data ? createAllTables() : <Skeleton variant="rect" height={350} />}
+
+    </ShowData>
   );
 }

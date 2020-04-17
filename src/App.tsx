@@ -6,9 +6,10 @@ import {
   Route,
 } from 'react-router-dom';
 
-import AdicionarPpc from './pages/AdicionarPpc';
-import MostrarPpc from './pages/MostrarPpc';
+import AddPpc from './pages/AddPpc';
 import Relatorios from './pages/Relatorios';
+import ShowCurso from './pages/ShowCurso';
+import ShowPpc from './pages/ShowPpc';
 import Tabelas from './pages/Tabelas';
 import GlobalStyle from './styles/global';
 
@@ -26,25 +27,29 @@ const App : React.FC = () => (
       <Route path="/tabelas/ppcs" exact>
         <Tabelas table="ppcs" />
       </Route>
-      
+
       <Route path="/tabelas/ppcs/adicionar" exact>
-        <AdicionarPpc />
+        <AddPpc />
       </Route>
 
       <Route path="/tabelas/ppcs/:id" exact>
-        <MostrarPpc />
+        <ShowPpc />
       </Route>
 
 
-      <Route path="/tabelas/professores">
+      <Route path="/tabelas/professores" exact>
         <Tabelas table="professores" />
       </Route>
 
-      <Route path="/tabelas/cursos">
+      <Route path="/tabelas/cursos" exact>
         <Tabelas table="cursos" />
       </Route>
 
-      <Route path="/relatorios">
+      <Route path="/tabelas/cursos/:id" exact>
+        <ShowCurso />
+      </Route>
+
+      <Route path="/relatorios" exact>
         <Relatorios />
       </Route>
     </Router>
