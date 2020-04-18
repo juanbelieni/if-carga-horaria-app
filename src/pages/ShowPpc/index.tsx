@@ -38,7 +38,6 @@ export default function ShowPpc() {
               perPage: pageSize,
               ppc_id: id,
               periodo,
-
             };
 
             api.index('disciplinas', params)
@@ -68,7 +67,7 @@ export default function ShowPpc() {
           options={{
             draggable: false,
             filtering: false,
-            sorting: true,
+            sorting: false,
             search: false,
           }}
           style={{

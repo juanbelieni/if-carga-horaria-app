@@ -62,7 +62,7 @@ function Tabelas({ table } : TabelasProps) {
         {
           title: 'Semestre de ingresso',
           field: 'semestre_ingresso',
-          render: ({ semestre_ingresso }) => (semestre_ingresso ? `${semestre_ingresso}º semestre` : 'Anual'),
+          render: ({ semestre_ingresso, semestral }) => (semestral ? `${semestre_ingresso}º semestre` : 'Anual'),
           lookup: { 1: '1º semestre', 2: '2º semestre', 0: 'Anual' },
         },
       ],

@@ -30,7 +30,7 @@ export default function ShowData({ children, data, title }: ShowDataProps) {
   function createListItem(name: string, value: number | string | undefined, Icon: FC, onClick?: (event: MouseEvent) => void) {
     return (
       <>
-        <ListItem>
+        <ListItem key={name}>
           <ListItemAvatar>
             <Avatar>
               <Icon />

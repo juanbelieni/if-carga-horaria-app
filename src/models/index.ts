@@ -32,6 +32,8 @@ export interface Curso {
   ano_ingresso: number,
   semestre_ingresso: number,
   simulado: boolean,
+  semestral: boolean,
+  duracao: number,
   ppc: string,
   ppc_id: number,
 }
@@ -47,4 +49,7 @@ export interface CargaHoraria {
   aulas_semana: number,
   duracao_aula: number,
   carga_horaria: number,
+  disciplina_id: number,
+  curso_id: number,
+  professor_id: number,
 }
