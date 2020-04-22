@@ -7,7 +7,7 @@ const api = axios.create({
 type Id = string | number;
 
 export default {
-  async index(table: string, params: Object) {
+  async index(table: string, params?: Object) {
     const res = await api.get(`/${table}`, { params });
     return res.data;
   },

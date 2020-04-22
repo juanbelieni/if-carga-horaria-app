@@ -2,36 +2,40 @@ import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import {useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import api from '../../api';
 import { Container, Unform } from './styles';
 
 interface FormProps {
   children: React.ReactNode,
-  name: string,
+  title?: string,
   table: string,
+  redirect?: string,
+  defaultValues?: Object,
 }
 
-export default function Form({ children, name, table }: FormProps) {
+export default function Form({
+  children, title, table, redirect, defaultValues,
+}: FormProps) {
   const history = useHistory();
   const [open, setOpen] = React.useState(false);
 
   async function submit(data: Object) {
     try {
-      await api.store(table, data);
-      history.push(`/tabelas/${table}`)
-    } catch(err) {
+      await api.store(table, { ...defaultValues, ...data });
+      history.push(redirect || `/tabelas/${table}`);
+    } catch (err) {
       setOpen(true);
     }
   }
 
   return (
     <Container>
-      <Typography variant="h4" component="h1">{`Adicionar ${name}`}</Typography>
+      {title && <Typography variant="h4" component="h1">{title}</Typography>}
       <Unform onSubmit={submit}>
         {children}
-        <Button variant="contained" color="primary" className="button" type="submit" style={{ color: 'white' }}>Adicionar</Button>
+        <Button variant="contained" color="primary" className="button" type="submit" style={{ color: 'white' }}>Concluir</Button>
       </Unform>
       <Snackbar
         anchorOrigin={{
@@ -41,7 +45,7 @@ export default function Form({ children, name, table }: FormProps) {
         open={open}
         onClose={() => setOpen(false)}
         autoHideDuration={3000}
-        message={`Erro ao adicionar ${name}`}
+        message="Erro ao concluir"
       />
     </Container>
   );

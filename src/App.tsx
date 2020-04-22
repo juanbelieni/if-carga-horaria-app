@@ -8,6 +8,7 @@ import {
 
 import AddPpc from './pages/AddPpc';
 import Relatorios from './pages/Relatorios';
+import SetCarga from './pages/SetCarga';
 import ShowCurso from './pages/ShowCurso';
 import ShowPpc from './pages/ShowPpc';
 import Tabelas from './pages/Tabelas';
@@ -47,6 +48,10 @@ const App : React.FC = () => (
 
       <Route path="/tabelas/cursos/:id" exact>
         <ShowCurso />
+      </Route>
+
+      <Route path="/tabelas/cursos/:curso_id/:disciplina_id" exact>
+        <SetCarga />
       </Route>
 
       <Route path="/relatorios" exact>

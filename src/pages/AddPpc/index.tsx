@@ -10,7 +10,7 @@ export default function AddPpc() {
   const [anual, setAnual] = useState<boolean>(true);
   return (
     <DefaultPage>
-      <Form name="PPC" table="ppcs">
+      <Form title="Adicionar PPC" table="ppcs">
         <TextField name="nome" label="Nome" className="input" required />
         <Select name="formacao" label="Formacao" className="input">
           <MenuItem value="Integrado">Integrado</MenuItem>

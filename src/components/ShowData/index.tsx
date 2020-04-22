@@ -6,6 +6,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import LaunchIcon from '@material-ui/icons/Launch';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -41,9 +42,11 @@ export default function ShowData({ children, data, title }: ShowDataProps) {
             onClick
               ? (
                 <ListItemSecondaryAction onClick={onClick}>
-                  <IconButton edge="end" aria-label="Mostrar" title="Mostrar">
-                    <LaunchIcon />
-                  </IconButton>
+                  <Tooltip title="Mostrar">
+                    <IconButton edge="end">
+                      <LaunchIcon />
+                    </IconButton>
+                  </Tooltip>
                 </ListItemSecondaryAction>
               )
               : null

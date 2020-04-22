@@ -1,8 +1,13 @@
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
+import LaunchIcon from '@material-ui/icons/Launch';
 import SubjectIcon from '@material-ui/icons/Subject';
 import Skeleton from '@material-ui/lab/Skeleton';
 import React, { useState, useEffect } from 'react';
@@ -45,11 +50,13 @@ export default function ShowCurso() {
     }
   }, [curso]);
 
+
   function getProfessor(disciplina_id: number) {
     const carga = cargas?.find((c) => c.disciplina_id === disciplina_id);
 
     return carga?.professor || 'Nenhum professor';
   }
+
 
   return (
     <ShowData
@@ -73,6 +80,7 @@ export default function ShowCurso() {
         },
       ]}
     >
+
       {
         periodos
           ? periodos.map((disciplinas, i) => {
@@ -84,8 +92,15 @@ export default function ShowCurso() {
                   <List>
                     {
                     disciplinas.map((disciplina) => (
-                      <ListItem key={periodo + disciplina.nome} button>
+                      <ListItem key={periodo + disciplina.nome}>
                         <ListItemText primary={disciplina.nome} secondary={cargas ? getProfessor(disciplina.id) : <Skeleton variant="text" />} />
+                        <ListItemSecondaryAction onClick={() => history.push(`/tabelas/cursos/${id}/${disciplina.id}`)}>
+                          <Tooltip title="Definir professor">
+                            <IconButton edge="end">
+                              <LaunchIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </ListItemSecondaryAction>
                       </ListItem>
                     ))
                   }
