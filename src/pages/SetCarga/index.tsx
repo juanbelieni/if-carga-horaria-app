@@ -51,9 +51,12 @@ export default function SetCarga() {
     >
       {carga && (
         <Form
-          table="cargas"
-          redirect={`/tabelas/cursos/${curso_id}`}
-          defaultValues={{ curso_id, disciplina_id }}
+          action={{
+            type: 'add',
+            table: 'cargas',
+            redirect: `/tabelas/cursos/${curso_id}`,
+            defaultValues: { curso_id, disciplina_id },
+          }}
         >
           <Select
             name="professor_id"

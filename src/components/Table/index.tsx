@@ -49,12 +49,20 @@ function Table({
           onClick: (event, rowData) => history.push(`/tabelas/${table}/${rowData.id}`),
         },
         {
+          icon: 'edit',
+          tooltip: `Editar ${name}`,
+          onClick: (event, rowData) => history.push(`/tabelas/${table}/${rowData.id}/editar`),
+        },
+        {
           icon: 'add',
           tooltip: `Adicionar ${name}`,
           isFreeAction: true,
           onClick: () => history.push(`/tabelas/${table}/adicionar`),
         },
       ]}
+      editable={{
+        onRowDelete: (oldData) => api.destroy(table, oldData.id),
+      }}
       options={{
         draggable: false,
         // selection: true,

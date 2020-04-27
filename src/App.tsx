@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 
 import AddPpc from './pages/AddPpc';
+import EditPpc from './pages/EditPpc';
 import Relatorios from './pages/Relatorios';
 import SetCarga from './pages/SetCarga';
 import ShowCurso from './pages/ShowCurso';
@@ -35,6 +36,10 @@ const App : React.FC = () => (
 
       <Route path="/tabelas/ppcs/:id" exact>
         <ShowPpc />
+      </Route>
+
+      <Route path="/tabelas/ppcs/:id/editar" exact>
+        <EditPpc />
       </Route>
 
 

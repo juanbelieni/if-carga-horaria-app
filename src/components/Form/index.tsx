@@ -10,25 +10,37 @@ import { Container, Unform } from './styles';
 interface FormProps {
   children: React.ReactNode,
   title?: string,
-  table: string,
-  redirect?: string,
-  defaultValues?: Object,
+  action: {
+    type: 'add' | 'edit',
+    table: string,
+    redirect: string,
+    id?: number | string,
+    defaultValues?: Object,
+  },
+
 }
 
-export default function Form({
-  children, title, table, redirect, defaultValues,
-}: FormProps) {
+export default function Form({ children, title, action }: FormProps) {
   const history = useHistory();
   const [open, setOpen] = React.useState(false);
 
   async function submit(data: Object) {
     try {
-      await api.store(table, { ...defaultValues, ...data });
-      history.push(redirect || `/tabelas/${table}`);
+      switch (action.type) {
+        case 'add':
+          await api.store(action.table, { ...action.defaultValues, ...data });
+          break;
+        case 'edit':
+          await api.update(action.table, action?.id || 0, { ...action.defaultValues, ...data });
+          break;
+        default:
+      }
+      history.push(action.redirect);
     } catch (err) {
       setOpen(true);
     }
   }
+
 
   return (
     <Container>
