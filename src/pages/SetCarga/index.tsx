@@ -13,21 +13,21 @@ import { CargaHoraria, Professor } from '../../models';
 
 
 export default function SetCarga() {
-  const { curso_id, disciplina_id } = useParams<{
-    curso_id: string,
+  const { turma_id, disciplina_id } = useParams<{
+    turma_id: string,
     disciplina_id: string,
   }>();
   const [carga, setCarga] = useState<CargaHoraria>();
   const [professores, setProfessores] = useState<Professor[]>();
 
   useEffect(() => {
-    api.index('cargas', { curso_id, disciplina_id })
+    api.index('cargas', { turma_id, disciplina_id })
       .then((data: CargaHoraria[]) => {
         if (data.length > 0) {
           setCarga(data[0]);
         }
       });
-  }, [curso_id, disciplina_id]);
+  }, [turma_id, disciplina_id]);
 
   useEffect(() => {
     api.index('professores')
@@ -39,8 +39,8 @@ export default function SetCarga() {
       title="Definir professor"
       data={[
         {
-          name: 'Curso',
-          value: carga?.curso,
+          name: 'Turma',
+          value: carga?.turma,
           icon: SchoolIcon,
         },
         {
@@ -55,8 +55,8 @@ export default function SetCarga() {
           action={{
             type: 'add',
             table: 'cargas',
-            redirect: `/tabelas/cursos/${curso_id}`,
-            defaultValues: { curso_id, disciplina_id },
+            redirect: `/tabelas/turmas/${turma_id}`,
+            defaultValues: { turma_id, disciplina_id },
           }}
         >
           <Select

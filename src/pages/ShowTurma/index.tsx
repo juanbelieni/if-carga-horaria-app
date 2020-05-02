@@ -16,27 +16,27 @@ import { useParams, useHistory } from 'react-router-dom';
 import api from '../../api';
 import Loading from '../../components/Loading';
 import ShowData from '../../components/ShowData';
-import { Curso, Disciplina, CargaHoraria } from '../../models';
+import { Turma, Disciplina, CargaHoraria } from '../../models';
 
-export default function ShowCurso() {
+export default function ShowTurma() {
   const { id } = useParams<{id: string}>();
-  const [curso, setCurso] = useState<Curso>();
+  const [turma, setTurma] = useState<Turma>();
   const [cargas, setCargas] = useState<CargaHoraria[]>();
   const [periodos, setPeriodos] = useState<Disciplina[][]>();
   const history = useHistory();
 
   useEffect(() => {
-    api.show('cursos', id).then((data) => {
-      setCurso(data);
+    api.show('turmas', id).then((data) => {
+      setTurma(data);
     });
   }, [id]);
 
   useEffect(() => {
-    if (curso) {
-      api.index('disciplinas', { ppc_id: curso.ppc_id })
+    if (turma) {
+      api.index('disciplinas', { ppc_id: turma.ppc_id })
         .then((data: Disciplina[]) => {
           const toPeriodos: typeof periodos = [];
-          for (let i = 0; i < curso.duracao; i += 1) {
+          for (let i = 0; i < turma.duracao; i += 1) {
             toPeriodos.push([]);
           }
           data.forEach((disciplina) => {
@@ -46,10 +46,10 @@ export default function ShowCurso() {
           setPeriodos(toPeriodos);
         });
 
-      api.index('cargas', { curso_id: curso.id })
+      api.index('cargas', { turma_id: turma.id })
         .then(setCargas);
     }
-  }, [curso]);
+  }, [turma]);
 
 
   function getProfessor(disciplina_id: number) {
@@ -61,22 +61,22 @@ export default function ShowCurso() {
 
   return (
     <ShowData
-      title="Curso"
+      title="Turma"
       data={[
         {
           name: 'PPC',
-          value: curso?.ppc,
+          value: turma?.ppc,
           icon: SubjectIcon,
-          onClick: () => history.push(`/tabelas/ppcs/${curso?.ppc_id}`),
+          onClick: () => history.push(`/tabelas/ppcs/${turma?.ppc_id}`),
         },
         {
           name: 'Ano de ingresso',
-          value: curso?.ano_ingresso,
+          value: turma?.ano_ingresso,
           icon: CalendarIcon,
         },
         {
           name: 'Semestre de ingresso',
-          value: curso && (curso.semestral ? `${curso.semestre_ingresso}º semestre` : 'Anual'),
+          value: turma && (turma.semestral ? `${turma.semestre_ingresso}º semestre` : 'Anual'),
           icon: CalendarIcon,
         },
       ]}
@@ -87,13 +87,13 @@ export default function ShowCurso() {
           if (disciplinas.length > 0) {
             return (
               <div key={periodo}>
-                <Typography variant="h5" component="h2">{`${periodo}º ${curso?.semestral ? 'semestre' : 'ano'}`}</Typography>
+                <Typography variant="h5" component="h2">{`${periodo}º ${turma?.semestral ? 'semestre' : 'ano'}`}</Typography>
                 <List>
                   {
                     disciplinas.map((disciplina) => (
                       <ListItem key={periodo + disciplina.nome}>
                         <ListItemText primary={disciplina.nome} secondary={cargas ? getProfessor(disciplina.id) : <Skeleton variant="text" />} />
-                        <ListItemSecondaryAction onClick={() => history.push(`/tabelas/cursos/${id}/${disciplina.id}`)}>
+                        <ListItemSecondaryAction onClick={() => history.push(`/tabelas/turmas/${id}/${disciplina.id}`)}>
                           <Tooltip title="Definir professor">
                             <IconButton edge="end">
                               <LaunchIcon />
