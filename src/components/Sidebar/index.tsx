@@ -27,8 +27,8 @@ export default function () {
           <ListItem onClick={() => history.push('/tabelas/ppcs')} button>
             <ListItemText>PPCs</ListItemText>
           </ListItem>
-          <ListItem onClick={() => history.push('/tabelas/cursos')} button>
-            <ListItemText>Cursos</ListItemText>
+          <ListItem onClick={() => history.push('/tabelas/turmas')} button>
+            <ListItemText>Turmas</ListItemText>
           </ListItem>
           <ListItem onClick={() => history.push('/tabelas/professores')} button>
             <ListItemText>Professores</ListItemText>

@@ -27,7 +27,7 @@ export interface Professor {
   siape: number,
 }
 
-export interface Curso {
+export interface Turma {
   id: number,
   ano_ingresso: number,
   semestre_ingresso: number,
@@ -40,7 +40,7 @@ export interface Curso {
 
 export interface CargaHoraria {
   id: number,
-  curso: string,
+  turma: string,
   professor: string,
   disciplina: string,
   ano: number,
@@ -50,6 +50,6 @@ export interface CargaHoraria {
   duracao_aula: number,
   carga_horaria: number,
   disciplina_id: number,
-  curso_id: number,
+  turma_id: number,
   professor_id: number,
 }

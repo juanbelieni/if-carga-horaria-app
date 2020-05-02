@@ -10,8 +10,8 @@ import AddPpc from './pages/AddPpc';
 import EditPpc from './pages/EditPpc';
 import Relatorios from './pages/Relatorios';
 import SetCarga from './pages/SetCarga';
-import ShowCurso from './pages/ShowCurso';
 import ShowPpc from './pages/ShowPpc';
+import ShowTurma from './pages/ShowTurma';
 import Tabelas from './pages/Tabelas';
 import GlobalStyle from './styles/global';
 
@@ -47,15 +47,15 @@ const App : React.FC = () => (
         <Tabelas table="professores" />
       </Route>
 
-      <Route path="/tabelas/cursos" exact>
-        <Tabelas table="cursos" />
+      <Route path="/tabelas/turmas" exact>
+        <Tabelas table="turmas" />
       </Route>
 
-      <Route path="/tabelas/cursos/:id" exact>
-        <ShowCurso />
+      <Route path="/tabelas/turmas/:id" exact>
+        <ShowTurma />
       </Route>
 
-      <Route path="/tabelas/cursos/:curso_id/:disciplina_id" exact>
+      <Route path="/tabelas/turmas/:turma_id/:disciplina_id" exact>
         <SetCarga />
       </Route>
 

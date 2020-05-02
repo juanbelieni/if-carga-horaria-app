@@ -5,11 +5,11 @@ import React from 'react';
 import DefaultPage from '../../components/DefaultPage';
 import Table from '../../components/Table';
 import {
-  Ppc, Professor, Curso,
+  Ppc, Professor, Turma,
 } from '../../models';
 
 interface TabelasProps {
-  table: 'ppcs' | 'professores' | 'cursos',
+  table: 'ppcs' | 'professores' | 'turmas',
 }
 
 interface Table<T extends Object> {
@@ -24,7 +24,7 @@ function Tabelas({ table } : TabelasProps) {
   const tables : {
     ppcs: Table<Ppc>,
     professores: Table<Professor>,
-    cursos: Table<Curso>,
+    turmas: Table<Turma>,
   } = {
     ppcs: {
       name: 'PPC',
@@ -52,10 +52,10 @@ function Tabelas({ table } : TabelasProps) {
         { title: 'Siape', field: 'siape' },
       ],
     },
-    cursos: {
-      name: 'curso',
-      title: 'Cursos',
-      table: 'cursos',
+    turmas: {
+      name: 'turma',
+      title: 'Turmas',
+      table: 'turmas',
       columns: [
         { title: 'PPC', field: 'ppc', filtering: false },
         { title: 'Ano de ingresso', field: 'ano_ingresso' },
