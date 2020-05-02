@@ -15,6 +15,7 @@ import React, { ReactNode, FC, MouseEvent } from 'react';
 import DefaultPage from '../DefaultPage';
 import { Container } from './styles';
 
+type onClickEvent = (event: MouseEvent) => void
 
 interface ShowDataProps {
   title: string,
@@ -22,13 +23,18 @@ interface ShowDataProps {
     name: string,
     value: number | string | undefined,
     icon: FC,
-    onClick?: (event: MouseEvent) => void,
+    onClick?: onClickEvent,
   }[],
   children: ReactNode,
 }
 
 export default function ShowData({ children, data, title }: ShowDataProps) {
-  function createListItem(name: string, value: number | string | undefined, Icon: FC, onClick?: (event: MouseEvent) => void) {
+  function createListItem(
+    name: string,
+    value: number | string | undefined,
+    Icon: FC,
+    onClick?: onClickEvent,
+  ) {
     return (
       <>
         <ListItem key={name}>

@@ -14,6 +14,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
 import api from '../../api';
+import Loading from '../../components/Loading';
 import ShowData from '../../components/ShowData';
 import { Curso, Disciplina, CargaHoraria } from '../../models';
 
@@ -80,17 +81,15 @@ export default function ShowCurso() {
         },
       ]}
     >
-
       {
-        periodos
-          ? periodos.map((disciplinas, i) => {
-            const periodo = i + 1;
-            if (disciplinas.length > 0) {
-              return (
-                <div key={periodo}>
-                  <Typography variant="h5" component="h2">{`${periodo}º ${curso?.semestral ? 'semestre' : 'ano'}`}</Typography>
-                  <List>
-                    {
+        periodos?.map((disciplinas, i) => {
+          const periodo = i + 1;
+          if (disciplinas.length > 0) {
+            return (
+              <div key={periodo}>
+                <Typography variant="h5" component="h2">{`${periodo}º ${curso?.semestral ? 'semestre' : 'ano'}`}</Typography>
+                <List>
+                  {
                     disciplinas.map((disciplina) => (
                       <ListItem key={periodo + disciplina.nome}>
                         <ListItemText primary={disciplina.nome} secondary={cargas ? getProfessor(disciplina.id) : <Skeleton variant="text" />} />
@@ -104,28 +103,13 @@ export default function ShowCurso() {
                       </ListItem>
                     ))
                   }
-                  </List>
-                </div>
-              );
-            }
-            return null;
-          })
-          : (
-            <>
-              <Typography variant="h5" component="h2"><Skeleton variant="text" /></Typography>
-              <List>
-                <ListItem>
-                  <ListItemText primary={<Skeleton variant="text" />} secondary={<Skeleton variant="text" />} />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary={<Skeleton variant="text" />} secondary={<Skeleton variant="text" />} />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary={<Skeleton variant="text" />} secondary={<Skeleton variant="text" />} />
-                </ListItem>
-              </List>
-            </>
-          )
+                </List>
+              </div>
+            );
+          }
+          return null;
+        })
+        || <Loading />
       }
     </ShowData>
   );

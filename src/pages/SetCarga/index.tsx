@@ -7,6 +7,7 @@ import { TextField, Select } from 'unform-material-ui';
 
 import api from '../../api';
 import Form from '../../components/Form';
+import Loading from '../../components/Loading';
 import ShowData from '../../components/ShowData';
 import { CargaHoraria, Professor } from '../../models';
 
@@ -49,7 +50,7 @@ export default function SetCarga() {
         },
       ]}
     >
-      {carga && (
+      {(carga && professores) ? (
         <Form
           action={{
             type: 'add',
@@ -74,7 +75,7 @@ export default function SetCarga() {
             ))}
           </Select>
         </Form>
-      )}
+      ) : <Loading />}
     </ShowData>
   );
 }
