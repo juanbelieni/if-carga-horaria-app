@@ -1,6 +1,7 @@
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { TextField, Select, Checkbox } from 'unform-material-ui';
 
 import api from '../../api';
@@ -11,6 +12,7 @@ import { Ppc } from '../../models';
 
 
 export default function AddPpc() {
+  const history = useHistory();
   const [ppcs, setPpcs] = useState<Ppc[]>();
   const [selectedPpc, setSelectedPpc] = useState<Ppc>();
 
@@ -19,16 +21,18 @@ export default function AddPpc() {
       api.index('ppcs').then(setPpcs);
     }
   }, []);
+
+  async function handleSubmit(newPpc: Object) {
+    await api.store('turmas', newPpc);
+    history.push('/tabelas/turmas');
+  }
+
   return (
     <DefaultPage>
       {ppcs ? (
         <Form
           title="Adicionar turma"
-          action={{
-            type: 'add',
-            table: 'turmas',
-            redirect: '/tabelas/turmas',
-          }}
+          onSubmit={handleSubmit}
         >
           <Select
             name="ppc_id"
@@ -37,11 +41,11 @@ export default function AddPpc() {
             onChange={(ev) => setSelectedPpc(ppcs.find(({ id }) => id === ev.target.value))}
           >
             {
-              ppcs?.map((ppc) => <MenuItem value={ppc.id}>{`${ppc.nome} ${ppc.formacao} ${ppc.ano}`}</MenuItem>)
+              ppcs?.map((ppc) => <MenuItem value={ppc.id} key={ppc.id}>{ppc.ppc}</MenuItem>)
             }
           </Select>
 
-          <TextField name="ano_ingresso" label="Ano" type="number" inputProps={{ min: 2000 }} className="input" required />
+          <TextField name="ano_ingresso" label="Ano de ingresso" type="number" inputProps={{ min: 2000 }} className="input" required />
 
           {
             selectedPpc?.semestral === 1
@@ -53,10 +57,16 @@ export default function AddPpc() {
             )
           }
 
-          <Select name="simulado" label="Simulação?" className="input" defaultValue={0}>
-            <MenuItem value={0}>Não</MenuItem>
-            <MenuItem value={1}>Sim</MenuItem>
-          </Select>
+          <FormControlLabel
+            control={(
+              <Checkbox
+                name="simulado"
+                color="primary"
+              />
+            )}
+            label="Simulação"
+            className="input"
+          />
 
         </Form>
       ) : <Loading />}

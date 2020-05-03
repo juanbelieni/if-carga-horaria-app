@@ -1,61 +1,54 @@
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Typography from '@material-ui/core/Typography';
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
 
-import api from '../../api';
 import { Container, Unform } from './styles';
 
 interface FormProps {
   children: React.ReactNode,
   title?: string,
-  action: {
-    type: 'add' | 'edit',
-    table: string,
-    redirect: string,
-    id?: number | string,
-    defaultValues?: Object,
-  },
-
+  onSubmit: (data: any) => Promise<any>,
 }
 
-export default function Form({ children, title, action }: FormProps) {
-  const history = useHistory();
-  const [open, setOpen] = React.useState(false);
+export default function Form({ children, title, onSubmit }: FormProps) {
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
 
-  async function submit(data: Object) {
+  async function handleUnformSubmit(data: Object) {
+    setDisableButton(true);
     try {
-      switch (action.type) {
-        case 'add':
-          await api.store(action.table, { ...action.defaultValues, ...data });
-          break;
-        case 'edit':
-          await api.update(action.table, action?.id || 0, { ...action.defaultValues, ...data });
-          break;
-        default:
-      }
-      history.push(action.redirect);
+      await onSubmit(data);
     } catch (err) {
-      setOpen(true);
+      setShowErrorMessage(true);
     }
+    setDisableButton(false);
   }
 
 
   return (
     <Container>
       {title && <Typography variant="h4" component="h1">{title}</Typography>}
-      <Unform onSubmit={submit}>
+      <Unform onSubmit={handleUnformSubmit}>
         {children}
-        <Button variant="contained" color="primary" className="button" type="submit" style={{ color: 'white' }}>Concluir</Button>
+        <Button
+          variant="contained"
+          color="primary"
+          className="button"
+          type="submit"
+          style={{ color: 'white' }}
+          disabled={disableButton}
+        >
+          Concluir
+        </Button>
       </Unform>
       <Snackbar
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'right',
         }}
-        open={open}
-        onClose={() => setOpen(false)}
+        open={showErrorMessage}
+        onClose={() => setShowErrorMessage(false)}
         autoHideDuration={3000}
         message="Erro ao concluir"
       />
