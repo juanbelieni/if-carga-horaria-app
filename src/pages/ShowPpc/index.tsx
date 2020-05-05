@@ -29,8 +29,8 @@ export default function ShowPpc() {
           title={`${periodo}º ${data?.semestral ? 'semestre' : 'ano'}`}
           columns={[
             { title: 'Discplina', field: 'nome' },
-            { title: 'Duracao da aula (min)', field: 'duracao_aula' },
-            { title: 'Aulas por semana', field: 'aulas_semana' },
+            { title: 'Duracao da aula', field: 'duracao_aula', render: ({ duracao_aula }) => `${duracao_aula} minutos` },
+            { title: 'Aulas por semana', field: 'aulas_semana', render: ({ aulas_semana }) => `${aulas_semana} aulas` },
           ]}
           data={({ page, pageSize }) => new Promise((resolve) => {
             const params = {
@@ -52,16 +52,19 @@ export default function ShowPpc() {
           editable={{
             onRowAdd: (newData: Object) => new Promise((resolve, reject) => {
               api.store('disciplinas', { ...newData, periodo, ppc_id: id })
-                .then(resolve);
+                .then(resolve)
+                .catch(reject);
             }),
 
             onRowUpdate: (newData: Disciplina) => new Promise((resolve, reject) => {
               api.update('disciplinas', newData.id, newData)
-                .then(resolve);
+                .then(resolve)
+                .catch(reject);
             }),
             onRowDelete: (oldData: Disciplina) => new Promise((resolve, reject) => {
               api.destroy('disciplinas', oldData.id)
-                .then(resolve);
+                .then(resolve)
+                .catch(reject);
             }),
           }}
           options={{
@@ -69,6 +72,7 @@ export default function ShowPpc() {
             filtering: false,
             sorting: false,
             search: false,
+            actionsColumnIndex: -1,
           }}
           style={{
             width: '100%',
