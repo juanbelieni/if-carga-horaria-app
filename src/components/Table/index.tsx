@@ -70,6 +70,7 @@ function Table({
         sorting: false,
         search: false,
         actionsColumnIndex: -1,
+        debounceInterval: 1000,
       }}
       style={{
         width: '100%',
