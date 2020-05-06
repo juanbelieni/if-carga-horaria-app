@@ -1,63 +1,108 @@
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
-import LaunchIcon from '@material-ui/icons/Launch';
 import SubjectIcon from '@material-ui/icons/Subject';
-import Skeleton from '@material-ui/lab/Skeleton';
+import MaterialTable from 'material-table';
 import React, { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
 import api from '../../api';
 import Loading from '../../components/Loading';
 import ShowData from '../../components/ShowData';
-import { Turma, Disciplina, CargaHoraria } from '../../models';
+import MTLocalization from '../../localization/MaterialTable';
+import { Turma, CargaHoraria, Professor } from '../../models';
 
 export default function ShowTurma() {
   const { id } = useParams<{id: string}>();
   const [turma, setTurma] = useState<Turma>();
-  const [cargas, setCargas] = useState<CargaHoraria[]>();
-  const [periodos, setPeriodos] = useState<Disciplina[][]>();
+  const [professores, setProfessores] = useState<Professor[]>();
   const history = useHistory();
 
   useEffect(() => {
-    api.show('turmas', id).then((data) => {
-      setTurma(data);
-    });
+    api.show('turmas', id)
+      .then(setTurma);
+
+    api.index('professores')
+      .then(setProfessores);
   }, [id]);
 
-  useEffect(() => {
-    if (turma) {
-      api.index('disciplinas', { ppc_id: turma.ppc_id })
-        .then((data: Disciplina[]) => {
-          const toPeriodos: typeof periodos = [];
-          for (let i = 0; i < turma.duracao; i += 1) {
-            toPeriodos.push([]);
-          }
-          data.forEach((disciplina) => {
-            toPeriodos[disciplina.periodo - 1].push(disciplina);
-          });
+  function createAllTables() {
+    const tables = [];
+    for (let periodo = 1; periodo <= (turma?.duracao || 0); periodo += 1) {
+      tables.push(
+        <MaterialTable<CargaHoraria>
+          title={`${periodo}º ${turma?.semestral ? 'semestre' : 'ano'}`}
+          columns={[
+            {
+              title: 'Discplina',
+              field: 'disciplina',
+              editable: 'never',
+            },
+            {
+              title: 'Professor',
+              field: 'professor',
+              render: ({ professor }) => professor,
+              editComponent: ({ onChange, rowData }) => (
+                <Select
+                  defaultValue={rowData.professor_id}
+                  onChange={(e) => onChange(e.target.value)}
+                  style={{ fontSize: '13px' }}
+                >
+                  {
+                    professores?.map(({ id: professor_id, nome }) => (
+                      <MenuItem
+                        value={professor_id}
+                        key={professor_id}
+                      >
+                        {nome}
+                      </MenuItem>
+                    ))
+                  }
+                </Select>
+              ),
+            },
+          ]}
+          data={({ page, pageSize }) => new Promise((resolve) => {
+            const params = {
+              page: page + 1,
+              perPage: pageSize,
+              turma_id: id,
+              periodo,
+            };
 
-          setPeriodos(toPeriodos);
-        });
-
-      api.index('cargas', { turma_id: turma.id })
-        .then(setCargas);
+            api.index('cargas', params)
+              .then((cargas) => {
+                resolve({
+                  data: cargas.data,
+                  page: cargas.page - 1,
+                  totalCount: cargas.total,
+                });
+              });
+          })}
+          editable={{
+            onRowUpdate: ({ disciplina_id, professor }) => new Promise((resolve, reject) => {
+              api.store('cargas', { turma_id: id, disciplina_id, professor_id: professor })
+                .then(resolve)
+                .catch(reject);
+            }),
+          }}
+          options={{
+            draggable: false,
+            filtering: false,
+            sorting: false,
+            search: false,
+            actionsColumnIndex: -1,
+          }}
+          style={{
+            width: '100%',
+          }}
+          localization={MTLocalization}
+        />,
+      );
+      tables.push(<br />);
     }
-  }, [turma]);
-
-
-  function getProfessor(disciplina_id: number) {
-    const carga = cargas?.find((c) => c.disciplina_id === disciplina_id);
-
-    return carga?.professor || 'Nenhum professor';
+    return tables;
   }
-
 
   return (
     <ShowData
@@ -81,36 +126,7 @@ export default function ShowTurma() {
         },
       ]}
     >
-      {
-        periodos?.map((disciplinas, i) => {
-          const periodo = i + 1;
-          if (disciplinas.length > 0) {
-            return (
-              <div key={periodo}>
-                <Typography variant="h5" component="h2">{`${periodo}º ${turma?.semestral ? 'semestre' : 'ano'}`}</Typography>
-                <List>
-                  {
-                    disciplinas.map((disciplina) => (
-                      <ListItem key={periodo + disciplina.nome}>
-                        <ListItemText primary={disciplina.nome} secondary={cargas ? getProfessor(disciplina.id) : <Skeleton variant="text" />} />
-                        <ListItemSecondaryAction onClick={() => history.push(`/tabelas/turmas/${id}/${disciplina.id}`)}>
-                          <Tooltip title="Definir professor">
-                            <IconButton edge="end">
-                              <LaunchIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </ListItemSecondaryAction>
-                      </ListItem>
-                    ))
-                  }
-                </List>
-              </div>
-            );
-          }
-          return null;
-        })
-        || <Loading />
-      }
+      { turma ? createAllTables() : <Loading />}
     </ShowData>
   );
 }

@@ -25,7 +25,7 @@ export default function ShowPpc() {
     const tables = [];
     for (let periodo = 1; periodo <= (ppc?.duracao || 0); periodo += 1) {
       tables.push(
-        <MaterialTable
+        <MaterialTable<Disciplina>
           title={`${periodo}º ${ppc?.semestral ? 'semestre' : 'ano'}`}
           columns={[
             { title: 'Discplina', field: 'nome' },
@@ -50,18 +50,18 @@ export default function ShowPpc() {
               });
           })}
           editable={{
-            onRowAdd: (newData: Object) => new Promise((resolve, reject) => {
+            onRowAdd: (newData) => new Promise((resolve, reject) => {
               api.store('disciplinas', { ...newData, periodo, ppc_id: id })
                 .then(resolve)
                 .catch(reject);
             }),
 
-            onRowUpdate: (newData: Disciplina) => new Promise((resolve, reject) => {
+            onRowUpdate: (newData) => new Promise((resolve, reject) => {
               api.update('disciplinas', newData.id, newData)
                 .then(resolve)
                 .catch(reject);
             }),
-            onRowDelete: (oldData: Disciplina) => new Promise((resolve, reject) => {
+            onRowDelete: (oldData) => new Promise((resolve, reject) => {
               api.destroy('disciplinas', oldData.id)
                 .then(resolve)
                 .catch(reject);
