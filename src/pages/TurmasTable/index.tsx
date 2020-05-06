@@ -29,13 +29,11 @@ function TurmasTable() {
             title: 'PPC',
             field: 'ppc',
             render: ({ ppc }) => ppc,
-            editComponent: ({ value, onChange }) => (
+            editComponent: ({ onChange, rowData }) => (
               <Select
-                value={value}
+                defaultValue={rowData.ppc_id}
                 onChange={(e) => onChange(e.target.value)}
-                style={{
-                  fontSize: '13px',
-                }}
+                style={{ fontSize: '13px' }}
               >
                 {
                   ppcs?.map((ppc) => <MenuItem value={ppc.id} key={ppc.id}>{ppc.ppc}</MenuItem>)
