@@ -9,6 +9,7 @@ import {
 import AddPpc from './pages/AddPpc';
 import AddTurma from './pages/AddTurma';
 import EditPpc from './pages/EditPpc';
+import PpcsTable from './pages/PpcsTable';
 import Relatorios from './pages/Relatorios';
 import SetCarga from './pages/SetCarga';
 import ShowPpc from './pages/ShowPpc';
@@ -20,6 +21,7 @@ const theme = createMuiTheme({
   palette: {
     type: 'dark',
     primary: green,
+    secondary: green,
   },
 });
 
@@ -28,7 +30,7 @@ const App : React.FC = () => (
   <ThemeProvider theme={theme}>
     <Router>
       <Route path="/tabelas/ppcs" exact>
-        <Tabelas table="ppcs" />
+        <PpcsTable />
       </Route>
 
       <Route path="/tabelas/ppcs/adicionar" exact>

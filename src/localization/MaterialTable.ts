@@ -27,8 +27,12 @@ const localization: Localization = {
       deleteText: 'Você deseja realmente apagar?',
     },
     addTooltip: 'Adicionar',
-    deleteTooltip: 'Apagar',
+    deleteTooltip: 'Excluir',
     editTooltip: 'Editar',
+  },
+  toolbar: {
+    exportName: 'Exportar como CSV',
+    exportTitle: 'Exportar',
   },
 };
 
