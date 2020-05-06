@@ -15,6 +15,7 @@ import SetCarga from './pages/SetCarga';
 import ShowPpc from './pages/ShowPpc';
 import ShowTurma from './pages/ShowTurma';
 import Tabelas from './pages/Tabelas';
+import TurmasTable from './pages/TurmasTable';
 import GlobalStyle from './styles/global';
 
 const theme = createMuiTheme({
@@ -51,7 +52,7 @@ const App : React.FC = () => (
       </Route>
 
       <Route path="/tabelas/turmas" exact>
-        <Tabelas table="turmas" />
+        <TurmasTable />
       </Route>
 
       <Route path="/tabelas/turmas/adicionar" exact>
