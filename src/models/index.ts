@@ -1,8 +1,3 @@
-export interface DefaultModel {
-  id: number,
-  [key: string]: number | string | DefaultModel | DefaultModel[],
-}
-
 export interface Ppc {
   id: number,
   nome: string,
@@ -10,6 +5,7 @@ export interface Ppc {
   semestral: number,
   duracao: number,
   ano: number,
+  ppc: string,
 }
 
 export interface Disciplina {

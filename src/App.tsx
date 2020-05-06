@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 
 import AddPpc from './pages/AddPpc';
+import AddTurma from './pages/AddTurma';
 import EditPpc from './pages/EditPpc';
 import Relatorios from './pages/Relatorios';
 import SetCarga from './pages/SetCarga';
@@ -49,6 +50,10 @@ const App : React.FC = () => (
 
       <Route path="/tabelas/turmas" exact>
         <Tabelas table="turmas" />
+      </Route>
+
+      <Route path="/tabelas/turmas/adicionar" exact>
+        <AddTurma />
       </Route>
 
       <Route path="/tabelas/turmas/:id" exact>

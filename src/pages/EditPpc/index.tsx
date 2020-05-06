@@ -1,7 +1,8 @@
 import MenuItem from '@material-ui/core/MenuItem';
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { TextField, Select } from 'unform-material-ui';
+
 
 import api from '../../api';
 import DefaultPage from '../../components/DefaultPage';
@@ -11,8 +12,9 @@ import { Ppc } from '../../models';
 
 
 export default function EditPpc() {
+  const history = useHistory();
   const { id } = useParams<{id: string}>();
-  const [anual, setAnual] = useState<boolean>(true);
+  const [annual, setAnnual] = useState<boolean>(true);
   const [ppc, setPpc] = useState<Ppc>();
 
   useEffect(() => {
@@ -20,18 +22,22 @@ export default function EditPpc() {
       .then(setPpc);
   }, []);
 
+  useEffect(() => {
+    setAnnual(!ppc?.semestral);
+  }, [ppc]);
+
+  async function handleSubmit(newDataForPpc: Object) {
+    await api.update('ppcs', id, newDataForPpc);
+    history.push('/tabelas/ppcs');
+  }
+
   return (
     <DefaultPage>
       {ppc
         ? (
           <Form
             title="Editar PPC"
-            action={{
-              type: 'edit',
-              table: 'ppcs',
-              redirect: '/tabelas/ppcs',
-              id,
-            }}
+            onSubmit={handleSubmit}
           >
             <TextField
               name="nome"
@@ -63,7 +69,7 @@ export default function EditPpc() {
               name="semestral"
               label="Semestral ou anual?"
               className="input"
-              onChange={(e) => setAnual(e.target.value === '0')}
+              onChange={(e) => setAnnual(e.target.value === '0')}
               defaultValue={ppc?.semestral.toString()}
             >
               <MenuItem value="1">Semestral</MenuItem>
@@ -71,8 +77,9 @@ export default function EditPpc() {
             </Select>
             <TextField
               name="duracao"
-              label={`Duração em ${anual ? 'anos' : 'semestres'}`}
+              label={`Duração em ${annual ? 'anos' : 'semestres'}`}
               type="number"
+              inputProps={{ min: 1 }}
               className="input"
               defaultValue={ppc?.duracao}
               required

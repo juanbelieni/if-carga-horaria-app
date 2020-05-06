@@ -2,7 +2,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import SchoolIcon from '@material-ui/icons/School';
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { TextField, Select } from 'unform-material-ui';
 
 import api from '../../api';
@@ -13,6 +13,7 @@ import { CargaHoraria, Professor } from '../../models';
 
 
 export default function SetCarga() {
+  const history = useHistory();
   const { turma_id, disciplina_id } = useParams<{
     turma_id: string,
     disciplina_id: string,
@@ -22,17 +23,19 @@ export default function SetCarga() {
 
   useEffect(() => {
     api.index('cargas', { turma_id, disciplina_id })
-      .then((data: CargaHoraria[]) => {
-        if (data.length > 0) {
-          setCarga(data[0]);
-        }
-      });
+      .then((data) => (data.length > 0) && setCarga(data[0]));
   }, [turma_id, disciplina_id]);
 
   useEffect(() => {
     api.index('professores')
       .then(setProfessores);
   }, []);
+
+  async function handleSubmit({ professor_id }: CargaHoraria) {
+    await api.store('cargas', { turma_id, disciplina_id, professor_id });
+    history.push(`/tabelas/turmas/${turma_id}`);
+  }
+
 
   return (
     <ShowData
@@ -51,14 +54,7 @@ export default function SetCarga() {
       ]}
     >
       {(carga && professores) ? (
-        <Form
-          action={{
-            type: 'add',
-            table: 'cargas',
-            redirect: `/tabelas/turmas/${turma_id}`,
-            defaultValues: { turma_id, disciplina_id },
-          }}
-        >
+        <Form onSubmit={handleSubmit}>
           <Select
             name="professor_id"
             label="Professor"
