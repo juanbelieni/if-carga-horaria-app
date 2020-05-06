@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 
 import api from '../../api';
 import ShowData from '../../components/ShowData';
-import MTLocalization from '../../localization/MaterialTable.json';
+import MTLocalization from '../../localization/MaterialTable';
 import { Ppc, Disciplina } from '../../models';
 
 export default function ShowPpc() {
