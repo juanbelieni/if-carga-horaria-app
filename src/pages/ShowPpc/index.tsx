@@ -1,32 +1,32 @@
 import CalendarIcon from '@material-ui/icons/CalendarToday';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import SchoolIcon from '@material-ui/icons/School';
-import Skeleton from '@material-ui/lab/Skeleton';
 import MaterialTable from 'material-table';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import api from '../../api';
+import Loading from '../../components/Loading';
 import ShowData from '../../components/ShowData';
 import MTLocalization from '../../localization/MaterialTable';
 import { Ppc, Disciplina } from '../../models';
 
 export default function ShowPpc() {
   const { id } = useParams<{id: string}>();
-  const [data, setData] = useState<Ppc>();
+  const [ppc, setPpc] = useState<Ppc>();
 
   useEffect(() => {
-    api.show('ppcs', id).then((_data) => {
-      setData(_data);
+    api.show('ppcs', id).then((data) => {
+      setPpc(data);
     });
   }, [id]);
 
   function createAllTables() {
     const tables = [];
-    for (let periodo = 1; periodo <= (data?.duracao || 0); periodo += 1) {
+    for (let periodo = 1; periodo <= (ppc?.duracao || 0); periodo += 1) {
       tables.push(
         <MaterialTable
-          title={`${periodo}º ${data?.semestral ? 'semestre' : 'ano'}`}
+          title={`${periodo}º ${ppc?.semestral ? 'semestre' : 'ano'}`}
           columns={[
             { title: 'Discplina', field: 'nome' },
             { title: 'Duracao da aula', field: 'duracao_aula', render: ({ duracao_aula }) => `${duracao_aula} minutos` },
@@ -91,28 +91,28 @@ export default function ShowPpc() {
       data={[
         {
           name: 'Nome',
-          value: data?.nome,
+          value: ppc?.nome,
           icon: LocalOfferIcon,
         },
         {
           name: 'Formação',
-          value: data?.formacao,
+          value: ppc?.formacao,
           icon: SchoolIcon,
         },
         {
           name: 'Ano',
-          value: data?.ano,
+          value: ppc?.ano,
           icon: CalendarIcon,
         },
         {
           name: 'Semestral ou anual',
-          value: data && (data?.semestral ? 'Semestral' : 'Anual'),
+          value: ppc && (ppc?.semestral ? 'Semestral' : 'Anual'),
           icon: CalendarIcon,
         },
       ]}
     >
 
-      {data ? createAllTables() : <Skeleton variant="rect" height={350} />}
+      {ppc ? createAllTables() : <Loading />}
 
     </ShowData>
   );
