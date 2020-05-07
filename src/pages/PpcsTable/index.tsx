@@ -98,8 +98,6 @@ function PpcsTable() {
           search: false,
           actionsColumnIndex: -1,
           debounceInterval: 1000,
-          exportButton: true,
-          exportFileName: `ppcs-${new Date().getTime()}`,
         }}
         style={{
           width: '100%',

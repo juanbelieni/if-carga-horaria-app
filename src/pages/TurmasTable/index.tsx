@@ -110,7 +110,6 @@ function TurmasTable() {
           search: false,
           actionsColumnIndex: -1,
           debounceInterval: 1000,
-          exportButton: true,
         }}
         style={{
           width: '100%',

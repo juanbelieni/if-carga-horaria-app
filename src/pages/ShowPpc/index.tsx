@@ -29,7 +29,7 @@ export default function ShowPpc() {
           title={`${periodo}º ${ppc?.semestral ? 'semestre' : 'ano'}`}
           columns={[
             { title: 'Discplina', field: 'nome' },
-            { title: 'Duracao da aula', field: 'duracao_aula', render: ({ duracao_aula }) => `${duracao_aula} minutos` },
+            { title: 'Duração da aula', field: 'duracao_aula', render: ({ duracao_aula }) => `${duracao_aula} minutos` },
             { title: 'Aulas por semana', field: 'aulas_semana', render: ({ aulas_semana }) => `${aulas_semana} aulas` },
           ]}
           data={({ page, pageSize }) => new Promise((resolve) => {
