@@ -7,10 +7,10 @@ import {
 } from 'react-router-dom';
 
 import PpcsTable from './pages/PpcsTable';
+import ProfessoresTable from './pages/ProfessoresTable';
 import Relatorios from './pages/Relatorios';
 import ShowPpc from './pages/ShowPpc';
 import ShowTurma from './pages/ShowTurma';
-import Tabelas from './pages/Tabelas';
 import TurmasTable from './pages/TurmasTable';
 import GlobalStyle from './styles/global';
 
@@ -34,16 +34,16 @@ const App : React.FC = () => (
         <ShowPpc />
       </Route>
 
-      <Route path="/tabelas/professores" exact>
-        <Tabelas table="professores" />
-      </Route>
-
       <Route path="/tabelas/turmas" exact>
         <TurmasTable />
       </Route>
 
       <Route path="/tabelas/turmas/:id" exact>
         <ShowTurma />
+      </Route>
+
+      <Route path="/tabelas/professores" exact>
+        <ProfessoresTable />
       </Route>
 
       <Route path="/relatorios" exact>
