@@ -17,7 +17,7 @@ import GlobalStyle from './styles/global';
 import usePersistedState from './utils/usePersistedState';
 
 const App : React.FC = () => {
-  const [darkMode, setDarkMode] = usePersistedState('dark-mode', true);
+  const [darkMode, setDarkMode] = usePersistedState('dark-mode', false);
 
   const theme = createMuiTheme({
     palette: {
