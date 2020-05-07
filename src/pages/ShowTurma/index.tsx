@@ -40,11 +40,11 @@ export default function ShowTurma() {
             },
             {
               title: 'Professor',
-              field: 'professor',
+              field: 'professor_id',
               render: ({ professor }) => professor,
-              editComponent: ({ onChange, rowData }) => (
+              editComponent: ({ onChange, value }) => (
                 <Select
-                  defaultValue={rowData.professor_id}
+                  defaultValue={value}
                   onChange={(e) => onChange(e.target.value)}
                   style={{ fontSize: '13px' }}
                 >
@@ -80,8 +80,8 @@ export default function ShowTurma() {
               });
           })}
           editable={{
-            onRowUpdate: ({ disciplina_id, professor }) => new Promise((resolve, reject) => {
-              api.store('cargas', { turma_id: id, disciplina_id, professor_id: professor })
+            onRowUpdate: ({ disciplina_id, professor_id }) => new Promise((resolve, reject) => {
+              api.store('cargas', { turma_id: id, disciplina_id, professor_id })
                 .then(resolve)
                 .catch(reject);
             }),

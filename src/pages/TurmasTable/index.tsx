@@ -27,11 +27,12 @@ function TurmasTable() {
         columns={[
           {
             title: 'PPC',
-            field: 'ppc',
+            field: 'ppc_id',
+            filtering: false,
             render: ({ ppc }) => ppc,
-            editComponent: ({ onChange, rowData }) => (
+            editComponent: ({ onChange, value }) => (
               <Select
-                defaultValue={rowData.ppc_id}
+                defaultValue={value}
                 onChange={(e) => onChange(e.target.value)}
                 style={{ fontSize: '13px' }}
               >
@@ -48,8 +49,12 @@ function TurmasTable() {
           {
             title: 'Semestre de ingresso',
             field: 'semestre_ingresso',
-            render: ({ semestre_ingresso, semestral }) => (semestral ? `${semestre_ingresso}º semestre` : 'Anual'),
             lookup: { 1: '1º semestre', 2: '2º semestre', 0: 'Anual' },
+          },
+          {
+            title: 'Simulação',
+            field: 'simulado',
+            lookup: { 0: 'Não', 1: 'Sim' },
           },
         ]}
         data={({ page, pageSize, filters }) => new Promise((resolve, reject) => {
@@ -74,13 +79,13 @@ function TurmasTable() {
         })}
         editable={{
           onRowAdd: (newData) => new Promise((resolve, reject) => {
-            api.store('turmas', { ...newData, ppc_id: newData.ppc })
+            api.store('turmas', newData)
               .then(resolve)
               .catch(reject);
           }),
 
           onRowUpdate: (newData) => new Promise((resolve, reject) => {
-            api.update('turmas', newData.id, { ...newData, ppc_id: newData.ppc })
+            api.update('turmas', newData.id, newData)
               .then(resolve)
               .catch(reject);
           }),
@@ -95,7 +100,7 @@ function TurmasTable() {
           {
             icon: 'launch',
             tooltip: 'Mostrar',
-            onClick: (event, rowData: any) => history.push(`/tabelas/ppcs/${rowData.id}`),
+            onClick: (event, rowData: any) => history.push(`/tabelas/turmas/${rowData.id}`),
           },
         ]}
         options={{
