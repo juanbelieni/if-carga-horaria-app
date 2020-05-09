@@ -4,6 +4,10 @@ import styled from 'styled-components';
 
 export const Container = styled(Box)`
   height: 100vh;
+
+  #dark-mode-switch {
+    margin-top: auto;
+  }
 `;
 
 export const Logo = styled.div`
