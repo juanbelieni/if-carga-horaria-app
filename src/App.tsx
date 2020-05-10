@@ -1,6 +1,7 @@
 import React from 'react';
 
 import green from '@material-ui/core/colors/green';
+import { ptBR } from '@material-ui/core/locale';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import {
   BrowserRouter as Router,
@@ -26,7 +27,7 @@ const App : React.FC = () => {
       primary: green,
       secondary: green,
     },
-  });
+  }, ptBR);
 
   return (
     <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>

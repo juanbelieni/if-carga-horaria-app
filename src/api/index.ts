@@ -31,4 +31,10 @@ export default {
   async update(table: string, id: Id, data: Object) {
     await api.put(`/${table}/${id}`, data);
   },
+
+  async getReport(report: string, params: Object) {
+    const res = await api.get(`reports/${report}`, { params });
+
+    return res.data;
+  },
 };

@@ -93,6 +93,7 @@
          "delimiter": "comma",
          "requireLast": false
        }
-     }]
+     }],
+    "react/jsx-props-no-spreading": "off"
   }
 }

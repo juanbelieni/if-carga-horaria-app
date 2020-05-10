@@ -1,5 +1,6 @@
-import MaterialTable from 'material-table';
 import React from 'react';
+
+import MaterialTable from 'material-table';
 import { useHistory } from 'react-router-dom';
 
 import api from '../../api';
