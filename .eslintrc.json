@@ -54,6 +54,7 @@
       {
         "newlinesBetween": "always",
         "groups": [
+          "/^react$/",
           "module",
           [
             "parent",
@@ -93,6 +94,5 @@
          "requireLast": false
        }
      }]
-    // "@typescript-eslint/no-unused-vars-experimental": "error"
   }
 }
