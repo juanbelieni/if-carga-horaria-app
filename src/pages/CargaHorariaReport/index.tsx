@@ -1,43 +1,60 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import Divider from '@material-ui/core/Divider';
+import FormControl from '@material-ui/core/FormControl';
+import IconButton from '@material-ui/core/IconButton';
+import InputLabel from '@material-ui/core/InputLabel';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import GetApp from '@material-ui/icons/GetApp';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import GetAppIcon from '@material-ui/icons/GetApp';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { ExportToCsv } from 'export-to-csv';
 
 import api from '../../api';
 import DefaultPage from '../../components/DefaultPage';
-import DarkModeContext from '../../contexts/darkMode';
 import { Turma, Professor } from '../../models';
 import {
   Content,
-  ButtonsContainer,
-  Button,
+  ReportOptionsContainer,
   InputsContainer,
   ExportContainer,
 } from './styles';
 
-const fields = [
-  { name: 'professor', title: 'Professor' },
-  { name: 'disciplina', title: 'Disciplina' },
-  // { name: 'aulas_semana', title: 'Quantidade de aulas por semana' },
-  // { name: 'duracao_aula', title: 'Duração da aula' },
-  { name: 'turma', title: 'Turma' },
-  // { name: 'periodo', title: 'Período' },
-  // { name: 'ano_semestre', title: 'Ano/semestre' },
-];
+type reportOptionsNames = 'default' | 'detailed' | 'simplified'
+
+const reportOptions: { [key in reportOptionsNames]: { title: string, description: string } } = {
+  default: {
+    title: 'Relatório padrão',
+    description: 'Retorna a carga horária do(s) professor(es) nas turmas selecionadas.',
+  },
+  detailed: {
+    title: 'Relatório detalhado',
+    description: 'Retorna a carga horária do(s) professor(es) por disciplina nas turmas selecionadas.',
+  },
+  simplified: {
+    title: 'Relatório simplificado',
+    description: 'Retorna apenas carga total do(s) professor(es) no semestre.',
+  },
+};
 
 const CargaHorariaReport: React.FC = () => {
-  const { darkMode } = useContext(DarkModeContext);
-  const [selectedFields, setSelectedFields] = useState<string[]>([]);
   const [turmas, setTurmas] = useState<Turma[]>([]);
+  const [selectedReportOption, setSelectedReportOption] = useState<reportOptionsNames>('default');
   const [selectedTurmas, setSelectedTurmas] = useState<number[]>([]);
   const [professores, setProfessores] = useState<Professor[]>([]);
   const [selectedProfessores, setSelectedProfessores] = useState<number[]>([]);
+  const [selectedAno, setSelectedAno] = useState<number>(2020);
+  const [selectedSemestre, setSelectedSemestre] = useState<number>(1);
   const [exporting, setExporting] = useState<boolean>(false);
+  const [anchorReportMenu, setAnchorReportMenu] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
     if (turmas.length === 0) {
@@ -51,12 +68,17 @@ const CargaHorariaReport: React.FC = () => {
     }
   }, [professores]);
 
-  function handleSelectField(fieldName: string) {
-    if (selectedFields.includes(fieldName)) {
-      setSelectedFields(selectedFields.filter((field) => field !== fieldName));
-    } else {
-      setSelectedFields([...selectedFields, fieldName]);
-    }
+  function openReportMenu(event: React.MouseEvent<HTMLButtonElement>) {
+    setAnchorReportMenu(event.currentTarget);
+  }
+
+  function closeReportMenu() {
+    setAnchorReportMenu(null);
+  }
+
+  function handleSelectReportOption(reportOption: reportOptionsNames) {
+    setSelectedReportOption(reportOption);
+    closeReportMenu();
   }
 
   function handleSelectTurma(event: any, newSelectedTurmas: Turma[]) {
@@ -71,22 +93,26 @@ const CargaHorariaReport: React.FC = () => {
     setExporting(true);
 
     const params = {
-      fields: selectedFields,
-      turmas: selectedTurmas,
-      professores: selectedProfessores,
+      option: selectedReportOption,
+      turmas: selectedTurmas.length === 0 ? undefined : selectedTurmas,
+      professores: selectedProfessores.length === 0 ? undefined : selectedProfessores,
+      ano: selectedAno,
+      semestre: selectedSemestre,
     };
 
-    const options = {
+    const csvOptions = {
       quoteStrings: '"',
       showLabels: true,
-      filename: `carga-horaria-${new Date().getTime()}`,
+      filename: `carga-horaria-${selectedAno}-${selectedSemestre}-${new Date().getTime()}`,
       useKeysAsHeaders: true,
     };
 
     try {
       const reportData = await api.getReport('carga-horaria', params);
-      const csvExporter = new ExportToCsv(options);
-      console.debug(reportData);
+      if (reportData.length === 0) {
+        alert('Não existem dados suficientes no banco de dados');
+      }
+      const csvExporter = new ExportToCsv(csvOptions);
       csvExporter.generateCsv(reportData);
     } catch (e) {
       // Fazer algo melhor depois
@@ -100,23 +126,38 @@ const CargaHorariaReport: React.FC = () => {
       <LinearProgress hidden={!exporting} />
       <Content>
         <Typography variant="h4" component="h1">Carga horária</Typography>
-        <ButtonsContainer container darkMode={darkMode} spacing={2}>
-          {fields.map((field, i) => {
-            const selected = selectedFields.includes(field.name);
-            return (
-              <Grid item key={field.name}>
-                <Button
-                  onClick={() => handleSelectField(field.name)}
-                  disableElevation={!selected}
-                >
-                  {field.title}
-                  { !selected && (<div className="filter" />) }
-                </Button>
-              </Grid>
-            );
-          })}
-        </ButtonsContainer>
+        <ReportOptionsContainer>
+          <Card variant="outlined">
+            <CardHeader
+              action={(
+                <IconButton onClick={openReportMenu}>
+                  <ExpandMoreIcon />
+                </IconButton>
+            )}
+              title={reportOptions[selectedReportOption].title}
+              subheader={reportOptions[selectedReportOption].description}
+            />
+            <Menu
+              anchorEl={anchorReportMenu}
+              keepMounted
+              open={Boolean(anchorReportMenu)}
+              onClose={closeReportMenu}
+            >
+              <MenuItem onClick={() => handleSelectReportOption('default')}>
+                {reportOptions.default.title}
+              </MenuItem>
+              <MenuItem onClick={() => handleSelectReportOption('simplified')}>
+                {reportOptions.simplified.title}
+              </MenuItem>
+              <MenuItem onClick={() => handleSelectReportOption('detailed')}>
+                {reportOptions.detailed.title}
+              </MenuItem>
+            </Menu>
+          </Card>
+        </ReportOptionsContainer>
+
         <InputsContainer>
+          <Divider />
           <Autocomplete<Turma>
             multiple
             className="input"
@@ -124,6 +165,7 @@ const CargaHorariaReport: React.FC = () => {
             options={turmas}
             onChange={handleSelectTurma}
             getOptionLabel={({ turma }) => turma}
+            groupBy={({ ano_ingresso }) => String(ano_ingresso)}
             loading={turmas.length === 0}
             renderInput={(params) => (
               <TextField {...params} label="Turmas" variant="outlined" />
@@ -136,20 +178,42 @@ const CargaHorariaReport: React.FC = () => {
             options={professores}
             onChange={handleSelectProfessor}
             getOptionLabel={({ nome }) => nome}
+            groupBy={({ nome }) => nome.substring(0, 1)}
             loading={professores.length === 0}
             renderInput={(params) => (
               <TextField {...params} label="Professores" variant="outlined" />
             )}
           />
+          <TextField
+            value={selectedAno}
+            onChange={(e) => setSelectedAno(Number(e.target.value))}
+            label="Ano"
+            type="number"
+            variant="outlined"
+            className="input"
+          />
+          <FormControl variant="outlined" className="input">
+            <InputLabel>Semestre</InputLabel>
+            <Select
+              value={selectedSemestre}
+              onChange={(e) => setSelectedSemestre(Number(e.target.value))}
+              label="Semestre"
+            >
+              <MenuItem value={1}>1º semestre</MenuItem>
+              <MenuItem value={2}>2º semestre</MenuItem>
+            </Select>
+          </FormControl>
         </InputsContainer>
+
         <ExportContainer>
           <Button
-            endIcon={<GetApp />}
+            endIcon={<GetAppIcon />}
             onClick={handleExport}
             disabled={exporting}
+            variant="contained"
+            color="primary"
           >
             Exportar como CSV
-
           </Button>
         </ExportContainer>
       </Content>
