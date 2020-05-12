@@ -11,6 +11,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -41,7 +42,7 @@ const reportOptions: { [key in reportOptionsNames]: { title: string, description
   },
   simplified: {
     title: 'Relatório simplificado',
-    description: 'Retorna apenas carga total do(s) professor(es) no semestre.',
+    description: 'Retorna apenas a carga horária total do(s) professor(es) no semestre.',
   },
 };
 
@@ -55,6 +56,7 @@ const CargaHorariaReport: React.FC = () => {
   const [selectedSemestre, setSelectedSemestre] = useState<number>(1);
   const [exporting, setExporting] = useState<boolean>(false);
   const [anchorReportMenu, setAnchorReportMenu] = useState<null | HTMLElement>(null);
+  const [snackbarInfo, setSnackbarInfo] = useState({ open: false, message: '' });
 
   useEffect(() => {
     if (turmas.length === 0) {
@@ -89,6 +91,20 @@ const CargaHorariaReport: React.FC = () => {
     setSelectedProfessores(newSelectedProfessores.map(({ id }) => id));
   }
 
+  function showMessage(message: string) {
+    setSnackbarInfo({
+      open: true,
+      message,
+    });
+  }
+
+  function handleSnackbarClose() {
+    setSnackbarInfo({
+      open: false,
+      message: '',
+    });
+  }
+
   async function handleExport() {
     setExporting(true);
 
@@ -109,14 +125,15 @@ const CargaHorariaReport: React.FC = () => {
 
     try {
       const reportData = await api.getReport('carga-horaria', params);
+
       if (reportData.length === 0) {
-        alert('Não existem dados suficientes no banco de dados');
+        showMessage('Não existem dados suficientes no banco de dados');
+      } else {
+        const csvExporter = new ExportToCsv(csvOptions);
+        csvExporter.generateCsv(reportData);
       }
-      const csvExporter = new ExportToCsv(csvOptions);
-      csvExporter.generateCsv(reportData);
     } catch (e) {
-      // Fazer algo melhor depois
-      alert('Erro ao exportar CSV');
+      showMessage('Erro ao exportar CSV');
     }
     setExporting(false);
   }
@@ -160,6 +177,7 @@ const CargaHorariaReport: React.FC = () => {
           <Divider />
           <Autocomplete<Turma>
             multiple
+            autoHighlight
             className="input"
             limitTags={2}
             options={turmas}
@@ -168,11 +186,17 @@ const CargaHorariaReport: React.FC = () => {
             groupBy={({ ano_ingresso }) => String(ano_ingresso)}
             loading={turmas.length === 0}
             renderInput={(params) => (
-              <TextField {...params} label="Turmas" variant="outlined" />
+              <TextField
+                {...params}
+                label="Turmas"
+                variant="outlined"
+                helperText="Se quiser dados de todas as turmas, basta selecionar nenhuma opção"
+              />
             )}
           />
           <Autocomplete<Professor>
             multiple
+            autoHighlight
             className="input"
             limitTags={2}
             options={professores}
@@ -181,7 +205,12 @@ const CargaHorariaReport: React.FC = () => {
             groupBy={({ nome }) => nome.substring(0, 1)}
             loading={professores.length === 0}
             renderInput={(params) => (
-              <TextField {...params} label="Professores" variant="outlined" />
+              <TextField
+                {...params}
+                label="Professores"
+                variant="outlined"
+                helperText="Se quiser dados de todas os professores, basta selecionar nenhuma opção"
+              />
             )}
           />
           <TextField
@@ -216,6 +245,16 @@ const CargaHorariaReport: React.FC = () => {
             Exportar como CSV
           </Button>
         </ExportContainer>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          open={snackbarInfo.open}
+          autoHideDuration={3000}
+          onClose={handleSnackbarClose}
+          message={snackbarInfo.message}
+        />
       </Content>
     </DefaultPage>
   );
