@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://daad855a.ngrok.io',
+  baseURL: 'http://192.168.0.106:3333',
 });
 
 type Id = string | number;
@@ -33,7 +33,7 @@ export default {
   },
 
   async getReport(report: string, params: Object) {
-    const res = await api.get(`reports/${report}`, { params });
+    const res = await api.get(`/reports/${report}`, { params });
 
     return res.data;
   },
