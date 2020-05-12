@@ -1,4 +1,5 @@
 import Box from '@material-ui/core/Box';
+import ListItem from '@material-ui/core/ListItem';
 import styled from 'styled-components';
 
 
@@ -26,4 +27,16 @@ export const Logo = styled.div`
 
     margin-top: 10px;
   }
+`;
+
+export const ListTitle = styled(ListItem)`
+  * {
+    font-weight: bold !important;
+  }
+`;
+
+export const ListLink = styled(ListItem)`
+  padding-left: 30px !important;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
 `;

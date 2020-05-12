@@ -1,3 +1,5 @@
+import React, { useContext } from 'react';
+
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -5,12 +7,13 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
-import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import ifSvg from '../../assets/svg/if.svg';
 import DarkModeContext from '../../contexts/darkMode';
-import { Container, Logo } from './styles';
+import {
+  Container, Logo, ListTitle, ListLink,
+} from './styles';
 
 export default function () {
   const history = useHistory();
@@ -29,17 +32,27 @@ export default function () {
         </Logo>
         <Divider />
         <List>
-          <ListItem onClick={() => history.push('/tabelas/ppcs')} button>
+          <ListTitle button>
+            <ListItemText>Tabelas</ListItemText>
+          </ListTitle>
+          <ListLink onClick={() => history.push('/tabelas/ppcs')} button>
             <ListItemText>PPCs</ListItemText>
-          </ListItem>
-          <ListItem onClick={() => history.push('/tabelas/turmas')} button>
+          </ListLink>
+          <ListLink onClick={() => history.push('/tabelas/turmas')} button>
             <ListItemText>Turmas</ListItemText>
-          </ListItem>
-          <ListItem onClick={() => history.push('/tabelas/professores')} button>
+          </ListLink>
+          <ListLink onClick={() => history.push('/tabelas/professores')} button>
             <ListItemText>Professores</ListItemText>
-          </ListItem>
+          </ListLink>
         </List>
-        <Divider />
+        <List>
+          <ListTitle button>
+            <ListItemText>Relatórios</ListItemText>
+          </ListTitle>
+          <ListLink onClick={() => history.push('/relatorios/carga-horaria')} button>
+            <ListItemText>Carga horária</ListItemText>
+          </ListLink>
+        </List>
         <List id="dark-mode-switch">
           <ListItem>
             <FormControlLabel
@@ -56,8 +69,6 @@ export default function () {
             />
           </ListItem>
         </List>
-
-
       </Drawer>
     </Container>
   );
