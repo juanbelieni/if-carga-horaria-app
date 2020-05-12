@@ -31,6 +31,7 @@ export interface Turma {
   semestral: boolean,
   duracao: number,
   ppc: string,
+  turma: string,
   ppc_id: number,
 }
 

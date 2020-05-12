@@ -7,10 +7,7 @@ export default createGlobalStyle`
     outline: 0;
     box-sizing: border-box;
 
-    /* font-family: 'Open Sans', sans-serif; */
     font-family: 'Red Hat Display', sans-serif;
-
-    /* scrollbar-color: #1c1e1f #2a2c2e; */
   }
 
   :root {
@@ -20,5 +17,13 @@ export default createGlobalStyle`
   body {
     max-height: 100vh;
     overflow: hidden;
+  }
+
+  .MuiButton-root * {
+    text-transform: none;
+  }
+
+  .MuiButton-contained * {
+    color: white;
   }
 `;

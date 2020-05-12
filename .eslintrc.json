@@ -54,6 +54,7 @@
       {
         "newlinesBetween": "always",
         "groups": [
+          "/^react$/",
           "module",
           [
             "parent",
@@ -92,7 +93,7 @@
          "delimiter": "comma",
          "requireLast": false
        }
-     }]
-    // "@typescript-eslint/no-unused-vars-experimental": "error"
+     }],
+    "react/jsx-props-no-spreading": "off"
   }
 }

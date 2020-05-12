@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://192.168.0.106:3333',
+  baseURL: 'http://daad855a.ngrok.io',
 });
 
 type Id = string | number;
@@ -30,5 +30,11 @@ export default {
 
   async update(table: string, id: Id, data: Object) {
     await api.put(`/${table}/${id}`, data);
+  },
+
+  async getReport(report: string, params: Object) {
+    const res = await api.get(`reports/${report}`, { params });
+
+    return res.data;
   },
 };

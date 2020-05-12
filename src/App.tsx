@@ -1,15 +1,17 @@
-import green from '@material-ui/core/colors/green';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import React from 'react';
+
+import green from '@material-ui/core/colors/green';
+import { ptBR } from '@material-ui/core/locale';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import {
   BrowserRouter as Router,
   Route,
 } from 'react-router-dom';
 
 import DarkModeContext from './contexts/darkMode';
+import CargaHorariaReport from './pages/CargaHorariaReport';
 import PpcsTable from './pages/PpcsTable';
 import ProfessoresTable from './pages/ProfessoresTable';
-import Relatorios from './pages/Relatorios';
 import ShowPpc from './pages/ShowPpc';
 import ShowTurma from './pages/ShowTurma';
 import TurmasTable from './pages/TurmasTable';
@@ -25,7 +27,7 @@ const App : React.FC = () => {
       primary: green,
       secondary: green,
     },
-  });
+  }, ptBR);
 
   return (
     <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
@@ -51,8 +53,8 @@ const App : React.FC = () => {
             <ProfessoresTable />
           </Route>
 
-          <Route path="/relatorios" exact>
-            <Relatorios />
+          <Route path="/relatorios/carga-horaria" exact>
+            <CargaHorariaReport />
           </Route>
         </Router>
         <GlobalStyle />
