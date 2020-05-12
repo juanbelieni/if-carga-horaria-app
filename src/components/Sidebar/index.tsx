@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
@@ -7,6 +7,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
+import { isMobile } from 'react-device-detect';
 import { useHistory } from 'react-router-dom';
 
 import ifSvg from '../../assets/svg/if.svg';
@@ -15,16 +16,25 @@ import {
   Container, Logo, ListTitle, ListLink,
 } from './styles';
 
-export default function () {
+interface SidebarProps{
+  open: boolean,
+  onClose: () => any,
+}
+
+const Sidebar : React.FC<SidebarProps> = ({ open, onClose }) => {
   const history = useHistory();
   const { darkMode, setDarkMode } = useContext(DarkModeContext);
 
   return (
     <Container>
       <Drawer
-        variant="permanent"
+        variant={isMobile ? 'temporary' : 'persistent'}
         anchor="left"
-        style={{ width: 210 }}
+        open={open}
+        onClose={onClose}
+        style={{
+          width: open ? 210 : 0,
+        }}
       >
         <Logo>
           <img src={ifSvg} alt="Logo" />
@@ -72,4 +82,6 @@ export default function () {
       </Drawer>
     </Container>
   );
-}
+};
+
+export default Sidebar;
