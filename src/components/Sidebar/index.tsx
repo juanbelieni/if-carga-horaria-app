@@ -35,6 +35,7 @@ const Sidebar : React.FC<SidebarProps> = ({ open, onClose }) => {
         style={{
           width: open ? 210 : 0,
         }}
+        transitionDuration={0}
       >
         <Logo>
           <img src={ifSvg} alt="Logo" />
