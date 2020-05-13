@@ -18,5 +18,9 @@ export const Content = styled(Box).attrs({
 })`
   width: 100%;
   max-height: 100vh;
-  overflow-y: scroll;
+
+  .scrollable {
+    overflow-y: scroll;
+    max-height: calc(100vh - 53px);
+  }
 `;
