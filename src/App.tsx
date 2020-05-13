@@ -33,7 +33,12 @@ const App : React.FC = () => {
   return (
     <DarkModeContext.Provider value={{ darkMode, setDarkMode }}>
       <ThemeProvider theme={theme}>
+
         <Router>
+          <Route path="/" exact>
+            <Landing />
+          </Route>
+
           <Route path="/tabelas/ppcs" exact>
             <PpcsTable />
           </Route>
@@ -56,10 +61,6 @@ const App : React.FC = () => {
 
           <Route path="/relatorios/carga-horaria" exact>
             <CargaHorariaReport />
-          </Route>
-
-          <Route>
-            <Landing />
           </Route>
         </Router>
         <GlobalStyle />
