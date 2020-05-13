@@ -10,6 +10,7 @@ import {
 
 import DarkModeContext from './contexts/darkMode';
 import CargaHorariaReport from './pages/CargaHorariaReport';
+import Landing from './pages/Landing';
 import PpcsTable from './pages/PpcsTable';
 import ProfessoresTable from './pages/ProfessoresTable';
 import ShowPpc from './pages/ShowPpc';
@@ -55,6 +56,10 @@ const App : React.FC = () => {
 
           <Route path="/relatorios/carga-horaria" exact>
             <CargaHorariaReport />
+          </Route>
+
+          <Route>
+            <Landing />
           </Route>
         </Router>
         <GlobalStyle />

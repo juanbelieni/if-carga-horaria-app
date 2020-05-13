@@ -20,7 +20,7 @@ export const Content = styled(Box).attrs({
   max-height: 100vh;
 
   .scrollable {
-    overflow-y: scroll;
+    overflow-y: auto;
     max-height: calc(100vh - 50px);
   }
 `;
