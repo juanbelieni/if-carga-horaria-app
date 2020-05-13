@@ -21,6 +21,6 @@ export const Content = styled(Box).attrs({
 
   .scrollable {
     overflow-y: scroll;
-    max-height: calc(100vh - 53px);
+    max-height: calc(100vh - 50px);
   }
 `;

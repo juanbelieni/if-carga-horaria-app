@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { isMobile } from 'react-device-detect';
+import { isMobile, MobileView } from 'react-device-detect';
 
 import Navbar from '../Navbar';
 import Sidebar from '../Sidebar';
@@ -21,6 +21,19 @@ function DefaultPage({ children }: {children: React.ReactNode}) {
         />
         <div className="scrollable">
           {children}
+          <MobileView>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+          </MobileView>
         </div>
       </Content>
     </Container>
